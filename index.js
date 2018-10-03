@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const ga = require("node-ga");
@@ -7,25 +8,24 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.enable("trust proxy");
-app.use(
-	ga("UA-79176349-10", {
-		cookie_name: "oswald_labs_platform"
-	})
-);
+process.env.USER !== "anandchowdhary" &&
+	app.use(
+		ga("UA-79176349-10", {
+			cookie_name: "oswald_labs_platform"
+		})
+	);
 
 const limiter = new RateLimit({
-	windowMs: 60 * 1000,
-	max: 30,
+	windowMs: 60000,
+	max: 100,
 	delayMs: 0
 });
 app.use(limiter);
 
 app.get("/", (req, res) => {
-	const icons = require("./icons.json");
-	const illustrations = [];
-	for (icon in icons) illustrations.push(slugify(icon, { lower: true }) + ".svg");
-	res.json({ illustrations });
+	res.json({ key: process.env.IP_INFO });
 });
+app.get("/ip/:ip", (req, res) => require("./wrappers/ip")(req, res));
 
 app.set("json spaces", 4);
-app.listen(process.env.PORT || 3001, () => console.log("Platform running!"));
+app.listen(process.env.PORT || 3002, () => console.log("Platform running!"));
