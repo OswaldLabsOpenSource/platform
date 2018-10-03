@@ -17,6 +17,7 @@
     "prettier": "onchange '**/*.{js,vue,scss}' -- prettier --write {{changed}}"
   },
   "dependencies": {
+    "aws-sdk": "^2.327.0",
     "axios": "^0.18.0",
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
