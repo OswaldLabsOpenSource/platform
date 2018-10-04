@@ -64,3 +64,16 @@ Send an image (data URI as JSON body param `dataUri`) to get object detection ta
     ]
 }       
 ```
+
+## API limits
+
+These APIs are free for public usage with the following rate limits:
+
+| Usage type      | Rate limit          | Total limit             |
+|-----------------|---------------------|-------------------------|
+| Without API key | 100 requests/minute | No daily/monthly limits |
+| With API key    | 100 requests/second | 1,000,000 monthly limit |
+
+## Privacy
+
+Usage of these APIs is free, and we don't collect any personally identifyable information. We do, however, track metrics using Google Analytics. This helps us scale and understand where/how often the platform is being used. The cookie `_ga` or `oswald_labs_platform` is used by Google Analytics. We also use Cloudflare to cache requests as our CDN, primarily for static resources. Cloudflare uses the `__cfduid` cookie for security; again, no personal information is collected.
