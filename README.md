@@ -76,4 +76,4 @@ These APIs are free for public usage with the following rate limits:
 
 ## Privacy
 
-Usage of these APIs is free, and we don't collect any personally identifyable information. We do, however, track metrics using Google Analytics. This helps us scale and understand where/how often the platform is being used. The cookie `_ga` or `oswald_labs_platform` is used by Google Analytics. We also use Cloudflare to cache requests as our CDN, primarily for static resources. Cloudflare uses the `__cfduid` cookie for security; again, no personal information is collected.
+Usage of these APIs is free, and we don't collect any personally identifiable information. We do, however, track metrics using Google Analytics. This helps us scale and understand where/how often the platform is being used. The cookie `_ga` or `oswald_labs_platform` is used by Google Analytics. We also use Cloudflare to cache requests as our CDN, primarily for static resources. Cloudflare uses the `__cfduid` cookie for security; again, no personal information is collected.
