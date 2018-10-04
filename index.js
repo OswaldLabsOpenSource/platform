@@ -29,5 +29,9 @@ app.get("/ip/:ip", (req, res) => require("./wrappers/ip")(req, res));
 app.post("/objects", (req, res) => require("./wrappers/objects")(req, res));
 app.get("/geocode/:lat/:lng", (req, res) => require("./wrappers/geocode")(req, res));
 
+app.get("*", (req, res) => {
+	res.status(404).json({ error: "route not found" });
+});
+
 app.set("json spaces", 4);
 app.listen(process.env.PORT || 3002, () => console.log("Platform running!"));
