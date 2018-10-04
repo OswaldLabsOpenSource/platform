@@ -8,7 +8,8 @@
   "devDependencies": {
     "nodemon": "^1.18.4",
     "onchange": "^4.1.0",
-    "prettier": "^1.14.3"
+    "prettier": "^1.14.3",
+    "redis": "^2.8.0"
   },
   "scripts": {
     "start": "node index.js",
