@@ -21,7 +21,7 @@ app.use(limiter);
 app.get("/", (req, res) => {
 	res.json({ hello: "world" });
 });
-app.get("/ip/:ip", (req, res) => require("./wrappers/ip")(req, res));
+app.get("/ip/:ip", (req, res) => require("./wrappers/ip").responder(req, res));
 app.post("/objects", (req, res) => require("./wrappers/objects")(req, res));
 app.get("/geocode/:lat/:lng", (req, res) => require("./wrappers/geocode")(req, res));
 
