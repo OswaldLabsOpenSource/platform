@@ -24,6 +24,6 @@
     "express": "^4.16.3",
     "express-rate-limit": "^3.2.0",
     "googleapis": "^34.0.0",
-    "node-ga": "^0.1.1"
+    "universal-analytics": "^0.4.17"
   }
 }

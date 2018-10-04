@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const ga = require("node-ga");
+const ua = require("universal-analytics");
 const RateLimit = require("express-rate-limit");
 
 const app = express();
@@ -9,11 +9,7 @@ app.use(express.json());
 app.use(cors());
 app.enable("trust proxy");
 process.env.USER !== "anandchowdhary" &&
-	app.use(
-		ga("UA-79176349-10", {
-			cookie_name: "oswald_labs_platform"
-		})
-	);
+	app.use(ua.middleware("UA-79176349-10", { cookieName: "oswald_labs_platform" }));
 
 const limiter = new RateLimit({
 	windowMs: 60000,
