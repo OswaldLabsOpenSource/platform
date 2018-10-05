@@ -60,3 +60,6 @@ env.js
 
 # next.js build output
 .next
+
+# Dumps
+dump.rdb

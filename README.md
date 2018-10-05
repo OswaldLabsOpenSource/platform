@@ -42,7 +42,7 @@ Send GPS cordinates for reverse geocoding, i.e. name in words:
             }
         }
     ]
-}       
+}
 ```
 
 ### `POST https://platform.oswaldlabs.com/objects`
@@ -65,7 +65,23 @@ Send an image (data URI as JSON body param `dataUri`) to get object detection ta
             "Confidence": 69.32366180419922
         }
     ]
-}       
+}
+```
+
+### `GET https://platform.oswaldlabs.com/translate/auto/fr/Hello,%20world!`
+
+Send a string to translate it from a language (`auto` to detect from language) to another language.
+
+```json
+{
+    "text": "Bonjour le monde!",
+    "from": {
+        "language": {
+            "didYouMean": false,
+            "iso": "en"
+        }
+    }
+}
 ```
 
 ## API limits

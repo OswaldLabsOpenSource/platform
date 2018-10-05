@@ -27,6 +27,7 @@
     "express-rate-limit": "^3.2.0",
     "googleapis": "^34.0.0",
     "redis": "^2.8.0",
+    "translatte": "^1.0.3",
     "universal-analytics": "^0.4.17"
   }
 }
