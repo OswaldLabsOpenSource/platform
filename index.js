@@ -25,7 +25,7 @@ app.get("/ip/:ip", (req, res) => require("./wrappers/ip").responder(req, res));
 app.get("/reader/:url", (req, res) => require("./wrappers/reader").responder(req, res));
 app.post("/objects", (req, res) => require("./wrappers/objects")(req, res));
 app.get("/geocode/:lat/:lng", (req, res) => require("./wrappers/geocode")(req, res));
-app.get("/translate/:to/:q", (req, res) => require("./modules/translate").responder(req, res));
+app.get("/translate/:to/:q", (req, res) => require("./wrappers/translate").responder(req, res));
 
 app.all("*", (req, res) => {
 	res.status(404).json({ error: "route not found" });
