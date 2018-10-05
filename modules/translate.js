@@ -1,10 +1,11 @@
-const translatte = require("translatte");
+const googleTranslate = require("google-translate")(process.env.GOOGLE_CLOUD);
 
 const translate = params =>
 	new Promise((resolve, reject) => {
-		translatte(params.q, { to: params.to, from: params.from })
-			.then(res => resolve(res))
-			.catch(err => reject(err));
+		googleTranslate.translate(params.q, params.to, (error, translation) => {
+			if (error) return reject(error);
+			resolve(translation);
+		});
 	});
 
 module.exports.promise = translate;

@@ -2,10 +2,10 @@ const translate = require("./translate");
 
 test("translate hello world to french", () => {
 	return translate
-		.promise({ to: "fr", q: "Hello, world!" })
+		.promise({ to: "fr", q: "Hello, world! How are you?" })
 		.then(data =>
 			expect(JSON.stringify(data)).toEqual(
-				'{"text":"Bonjour le monde!","from":{"language":{"didYouMean":false,"iso":"en"},"text":{"autoCorrected":false,"value":"","didYouMean":false}},"raw":""}'
+				'{"translatedText": "Bonjour! Comment allez-vous?","detectedSourceLanguage": "en","originalText": "Good morning! How are you?"}'
 			)
 		);
 });

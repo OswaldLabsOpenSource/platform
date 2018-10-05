@@ -68,19 +68,15 @@ Send an image (data URI as JSON body param `dataUri`) to get object detection ta
 }
 ```
 
-### `GET https://platform.oswaldlabs.com/translate/auto/fr/Hello,%20world!`
+### `GET https://platform.oswaldlabs.com/translate/fr/Good%20morning!%20How%20are%20you?`
 
-Send a string to translate it from a language (`auto` to detect from language) to another language.
+Send a string to translate it to another language.
 
 ```json
 {
-    "text": "Bonjour le monde!",
-    "from": {
-        "language": {
-            "didYouMean": false,
-            "iso": "en"
-        }
-    }
+    "translatedText": "Bonjour! Comment allez-vous",
+    "detectedSourceLanguage": "en",
+    "originalText": "Good morning! How are you"
 }
 ```
 
