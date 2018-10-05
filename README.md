@@ -84,6 +84,29 @@ Send a string to translate it from a language (`auto` to detect from language) t
 }
 ```
 
+### `GET https://platform.oswaldlabs.com/reader/https%3A%2F%2Fexample.com`
+
+Send a webpage/article URL to get its main content/reader view
+
+```json
+{
+    "title": "Example Domain",
+    "author": null,
+    "date_published": null,
+    "dek": null,
+    "lead_image_url": null,
+    "content": "<div> <p>This domain is established....</p> </div>",
+    "next_page_url": null,
+    "url": "https://example.com",
+    "domain": "example.com",
+    "excerpt": "This domain is established to be used for...",
+    "word_count": 28,
+    "direction": "ltr",
+    "total_pages": 1,
+    "rendered_pages": 1
+}
+```
+
 ## API limits
 
 These APIs are free for public usage with the following rate limits:
