@@ -2,6 +2,7 @@
 
 [![Uptime Robot ratio (30 days)](https://img.shields.io/uptimerobot/ratio/m781065098-7bb8bda769f96da5183584a5.svg)](https://status.oswaldlabs.com)
 ![Travis (.org)](https://img.shields.io/travis/OswaldLabsOpenSource/platform.svg)
+[![Codacy coverage](https://img.shields.io/codacy/coverage/e835f8f5b99d474cbf2e065806581b67.svg)](https://app.codacy.com/project/AnandChowdhary/platform/dashboard?branchId=9094438)
 
 Oswald Labs Platform is a set of open, extensible APIs and SDKs to build apps. This repository contains (some) code that runs on our servers, primarily serving as a wrapper around various APIs and to prevent API key exposion. Most APIs available here are free for public use with rate limits.
 
@@ -68,15 +69,15 @@ Send an image (data URI as JSON body param `dataUri`) to get object detection ta
 }
 ```
 
-### `GET https://platform.oswaldlabs.com/v1/translate/fr/Good%20morning!%20How%20are%20you?`
+### `GET https://platform.oswaldlabs.com/v1/translate/fr/Hello`
 
 Send a string to translate it to another language.
 
 ```json
 {
-    "translatedText": "Bonjour! Comment allez-vous",
+    "translatedText": "Bonjour",
     "detectedSourceLanguage": "en",
-    "originalText": "Good morning! How are you"
+    "originalText": "Hello"
 }
 ```
 
@@ -110,7 +111,9 @@ These APIs are free for public usage with the following rate limits (requests sl
 | Usage type      | Rate limit          | Total limit             |
 |-----------------|---------------------|-------------------------|
 | Without API key | 100 requests/minute | No daily/monthly limits |
-| With API key    | 100 requests/second | 1,000,000 monthly limit |
+| With API key    | No rate limits      | 1,000,000 monthly limit |
+
+When you're using authenticated endpoints, use `/secure/*` instead of `/v1/*` to avoid all rate limits and send your API key as `x-api-key` in the header. API keys are available for free to [Oswald Labs Accelerator](https://oswaldlabs.com/accelerator) startups and our partners. Custom-priced API keys are available for everyone else; [get in touch](https://oswaldlabs.com/contact) to request one.
 
 ## Privacy
 
