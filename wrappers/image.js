@@ -39,7 +39,7 @@ module.exports.responder = (req, res) => {
 	const key = `wrappers/image/${req.params.q}`;
 	client.get(key, (error, reply) => {
 		if (reply && process.env.USER !== "anandchowdhary") {
-			return res.json(JSON.parse(reply));
+			return res.redirect(JSON.parse(reply).url);
 		} else {
 			image(req.params)
 				.then(r => {

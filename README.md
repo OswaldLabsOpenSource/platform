@@ -71,7 +71,7 @@ Send an image (data URI as JSON body param `dataUri`) to get object detection ta
 
 ### `GET https://platform.oswaldlabs.com/v1/translate/fr/Hello`
 
-Send a string to translate it to another language.
+Send a string to translate it to another language:
 
 ```json
 {
@@ -83,7 +83,7 @@ Send a string to translate it to another language.
 
 ### `GET https://platform.oswaldlabs.com/v1/reader/https%3A%2F%2Fexample.com`
 
-Send a webpage/article URL to get its main content/reader view
+Send a webpage/article URL to get its main content/reader view:
 
 ```json
 {
@@ -102,6 +102,22 @@ Send a webpage/article URL to get its main content/reader view
     "total_pages": 1,
     "rendered_pages": 1
 }
+```
+
+### `GET https://platform.oswaldlabs.com/v1/image/india`
+
+Get the best (probably free-to-use) image for a search query from Wikimedia Commons, fallback to Bing:
+
+```html
+<img alt="India image" src="https://platform.oswaldlabs.com/v1/image/india">
+```
+
+### `GET https://platform.oswaldlabs.com/v1/screenshot/https%3A%2F%2Fgoogle.com`
+
+Generate a screenshot of the given URL:
+
+```html
+<img alt="India image" src="https://platform.oswaldlabs.com/v1/screenshot/https%3A%2F%2Fgoogle.com">
 ```
 
 ## API limits

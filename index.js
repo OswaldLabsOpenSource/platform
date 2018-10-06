@@ -38,6 +38,7 @@ app.post("/v1/objects", (req, res) => require("./wrappers/objects").responder(re
 app.get("/v1/geocode/:lat/:lng", (req, res) => require("./wrappers/geocode").responder(req, res));
 app.get("/v1/translate/:to/:q", (req, res) => require("./wrappers/translate").responder(req, res));
 app.get("/v1/image/:q", (req, res) => require("./wrappers/image").responder(req, res));
+app.get("/v1/screenshot/:url", (req, res) => require("./wrappers/screenshot").responder(req, res));
 
 // Secured endpoints
 const secure = require("./secure");
@@ -48,6 +49,7 @@ app.post("/secure/objects", (req, res) => secure.respond(req, res, require("./wr
 app.get("/secure/geocode/:lat/:lng", (req, res) => secure.respond(req, res, require("./wrappers/geocode")));
 app.get("/secure/translate/:to/:q", (req, res) => secure.respond(req, res, require("./wrappers/translate")));
 app.get("/secure/image/:q", (req, res) => secure.respond(req, res, require("./wrappers/image")));
+app.get("/secure/screenshot/:q", (req, res) => secure.respond(req, res, require("./wrappers/screenshot")));
 
 app.all("*", (req, res) => {
 	res.status(404).json({ error: "route not found" });
