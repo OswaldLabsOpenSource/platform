@@ -26,8 +26,10 @@
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "express-rate-limit": "^3.2.0",
+    "express-slow-down": "^1.0.1",
     "google-translate": "^2.2.0",
     "googleapis": "^34.0.0",
+    "jsonwebtoken": "^8.3.0",
     "redis": "^2.8.0",
     "universal-analytics": "^0.4.17"
   }
