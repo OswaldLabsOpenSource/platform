@@ -12,6 +12,7 @@ const ip = params =>
 			});
 	});
 
+module.exports.api = "ip";
 module.exports.promise = ip;
 module.exports.responder = (req, res) => {
 	const client = require("redis").createClient(process.env.REDIS_URL);

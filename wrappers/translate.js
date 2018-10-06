@@ -8,6 +8,7 @@ const translate = params =>
 		});
 	});
 
+module.exports.api = "translate";
 module.exports.promise = translate;
 module.exports.responder = (req, res) => {
 	const client = require("redis").createClient(process.env.REDIS_URL);

@@ -34,8 +34,8 @@ app.get("/", (req, res) => {
 // Public endpoints
 app.get("/v1/ip/:ip", (req, res) => require("./wrappers/ip").responder(req, res));
 app.get("/v1/reader/:url", (req, res) => require("./wrappers/reader").responder(req, res));
-app.post("/v1/objects", (req, res) => require("./wrappers/objects")(req, res));
-app.get("/v1/geocode/:lat/:lng", (req, res) => require("./wrappers/geocode")(req, res));
+app.post("/v1/objects", (req, res) => require("./wrappers/objects").responder(req, res));
+app.get("/v1/geocode/:lat/:lng", (req, res) => require("./wrappers/geocode").responder(req, res));
 app.get("/v1/translate/:to/:q", (req, res) => require("./wrappers/translate").responder(req, res));
 
 // Secured endpoints

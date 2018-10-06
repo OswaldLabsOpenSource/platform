@@ -16,6 +16,7 @@ const reader = params =>
 			});
 	});
 
+module.exports.api = "reader";
 module.exports.promise = reader;
 module.exports.responder = (req, res) => {
 	const client = require("redis").createClient(process.env.REDIS_URL);
