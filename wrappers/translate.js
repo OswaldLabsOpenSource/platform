@@ -10,7 +10,6 @@ const translate = params =>
 
 module.exports.promise = translate;
 module.exports.responder = (req, res) => {
-	req.params.from = req.params.from == "auto" ? undefined : req.params.from;
 	const client = require("redis").createClient(process.env.REDIS_URL);
 	client.on("error", error => new Error(error));
 	const key = `wrappers/translate/${req.params.from}/${req.params.to}/${req.params.q}`;

@@ -7,7 +7,7 @@ Oswald Labs Platform is a set of open, extensible APIs and SDKs to build apps. T
 
 ## Endpoints
 
-### `GET https://platform.oswaldlabs.com/ip/8.8.8.8`
+### `GET https://platform.oswaldlabs.com/v1/ip/8.8.8.8`
 
 Send an IP address to get its location and organizational information:
 
@@ -25,7 +25,7 @@ Send an IP address to get its location and organizational information:
 }
 ```
 
-### `GET https://platform.oswaldlabs.com/geocode/52.2090558/6.8687985`
+### `GET https://platform.oswaldlabs.com/v1/geocode/52.2090558/6.8687985`
 
 Send GPS cordinates for reverse geocoding, i.e. name in words:
 
@@ -45,7 +45,7 @@ Send GPS cordinates for reverse geocoding, i.e. name in words:
 }
 ```
 
-### `POST https://platform.oswaldlabs.com/objects`
+### `POST https://platform.oswaldlabs.com/v1/objects`
 
 Send an image (data URI as JSON body param `dataUri`) to get object detection tags with accuracy:
 
@@ -68,7 +68,7 @@ Send an image (data URI as JSON body param `dataUri`) to get object detection ta
 }
 ```
 
-### `GET https://platform.oswaldlabs.com/translate/fr/Good%20morning!%20How%20are%20you?`
+### `GET https://platform.oswaldlabs.com/v1/translate/fr/Good%20morning!%20How%20are%20you?`
 
 Send a string to translate it to another language.
 
@@ -80,7 +80,7 @@ Send a string to translate it to another language.
 }
 ```
 
-### `GET https://platform.oswaldlabs.com/reader/https%3A%2F%2Fexample.com`
+### `GET https://platform.oswaldlabs.com/v1/reader/https%3A%2F%2Fexample.com`
 
 Send a webpage/article URL to get its main content/reader view
 
@@ -105,7 +105,7 @@ Send a webpage/article URL to get its main content/reader view
 
 ## API limits
 
-These APIs are free for public usage with the following rate limits:
+These APIs are free for public usage with the following rate limits (requests slow down after 500 requests/15 minutes):
 
 | Usage type      | Rate limit          | Total limit             |
 |-----------------|---------------------|-------------------------|
