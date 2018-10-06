@@ -15,7 +15,7 @@ module.exports.responder = (req, res) => {
 	client.on("error", error => new Error(error));
 	const key = `wrappers/translate/${req.params.from}/${req.params.to}/${req.params.q}`;
 	client.get(key, (error, reply) => {
-		if (reply) {
+		if (reply && process.env.USER !== "anandchowdhary") {
 			return res.json(JSON.parse(reply));
 		} else {
 			translate(req.params)

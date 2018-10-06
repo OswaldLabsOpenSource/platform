@@ -23,7 +23,7 @@ module.exports.responder = (req, res) => {
 	client.on("error", error => new Error(error));
 	const key = `wrappers/geocode/${req.params.lat}/${req.params.lng}`;
 	client.get(key, (error, reply) => {
-		if (reply) {
+		if (reply && process.env.USER !== "anandchowdhary") {
 			return res.json(JSON.parse(reply));
 		} else {
 			geocode(req.params)
