@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const cached = require("./cached");
 
 module.exports.generate = (req, res) => {
 	const token = jwt.sign(
@@ -30,6 +31,6 @@ module.exports.respond = (req, res, api) => {
 			return res.status(401).json({ error: "unauthorized_ip_address" });
 		if (typeof decoded.domain_restrictions === "object" && !decoded.domain_restrictions.includes(headers.host))
 			return res.status(401).json({ error: "unauthorized_cors_domain" });
-		api.responder(req, res);
+		cached(req, res, api);
 	});
 };

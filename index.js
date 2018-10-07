@@ -32,14 +32,15 @@ app.get("/", (req, res) => {
 });
 
 // Public endpoints
-app.get("/v1/ip/:ip", (req, res) => require("./wrappers/ip").responder(req, res));
-app.get("/v1/reader/:url", (req, res) => require("./wrappers/reader").responder(req, res));
-app.post("/v1/objects", (req, res) => require("./wrappers/objects").responder(req, res));
-app.get("/v1/geocode/:lat/:lng", (req, res) => require("./wrappers/geocode").responder(req, res));
-app.get("/v1/weather/:lat/:lng", (req, res) => require("./wrappers/weather").responder(req, res));
-app.get("/v1/translate/:to/:q", (req, res) => require("./wrappers/translate").responder(req, res));
-app.get("/v1/image/:q", (req, res) => require("./wrappers/image").responder(req, res));
-app.get("/v1/screenshot/:url", (req, res) => require("./wrappers/screenshot").responder(req, res));
+const cached = require("./cached");
+app.get("/v1/ip/:ip", (req, res) => cached(req, res, require("./wrappers/ip")));
+app.get("/v1/reader/:url", (req, res) => cached(req, res, require("./wrappers/reader")));
+app.post("/v1/objects", (req, res) => cached(req, res, require("./wrappers/objects")));
+app.get("/v1/geocode/:lat/:lng", (req, res) => cached(req, res, require("./wrappers/geocode")));
+app.get("/v1/weather/:lat/:lng", (req, res) => cached(req, res, require("./wrappers/weather")));
+app.get("/v1/translate/:to/:q", (req, res) => cached(req, res, require("./wrappers/translate")));
+app.get("/v1/image/:q", (req, res) => cached(req, res, require("./wrappers/image")));
+app.get("/v1/screenshot/:url", (req, res) => cached(req, res, require("./wrappers/screenshot")));
 
 // Secured endpoints
 const secure = require("./secure");
