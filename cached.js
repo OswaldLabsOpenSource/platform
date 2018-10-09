@@ -9,12 +9,16 @@ module.exports = (req, res, api) => {
 	// 	if (reply && !uncached.includes(api.api)) {
 	// 		return res.json(JSON.parse(reply));
 	// 	} else {
-			api.promise(req.params)
+			api.promise(Object.values(req.params).length ? req.params : req.body)
 				.then(r => {
 					res.json(r);
 					client.set(key, JSON.stringify(r));
 				})
-				.catch(e => res.json(e));
+				.catch(e => {
+					try {
+						res.json(e);
+					} catch (e) {}
+				});
 		// }
 	// });
 };
