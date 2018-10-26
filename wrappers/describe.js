@@ -1,20 +1,28 @@
 const axios = require("axios");
+const formData = require("form-data");
+const microsoftComputerVision = require("microsoft-computer-vision");
 
 const describe = body =>
 	new Promise((resolve, reject) => {
-		axios
-			.post(`https://westeurope.api.cognitive.microsoft.com/vision/v1.0/describe`, body, {
-				headers: {
-					"content-type": "application/octet-stream",
-					"Ocp-Apim-Subscription-Key": process.env.AZURE
-				}
+		const FormData = new formData();
+		const bufferFile = new Buffer(body.dataUri.replace(/^data:image\/\w+;base64,/, ""), "base64");
+		FormData.append("file", bufferFile);
+		microsoftComputerVision
+			.describeImage({
+				"Ocp-Apim-Subscription-Key": process.env.AZURE,
+				"request-origin": "westeurope",
+				"max-candidates": "1",
+				"content-type": "application/octet-stream",
+				body: bufferFile,
+				"visual-features": "Tags, Faces"
 			})
-			.then(response => {
-				resolve(response.data);
+			.then(result => {
+				console.log("OK", result);
+				resolve(result);
 			})
 			.catch(error => {
-				console.log(error.response.data);
-				reject({ success: false, error: error.response.data });
+				console.log("Err", error);
+				reject({ error: "ok" });
 			});
 	});
 
