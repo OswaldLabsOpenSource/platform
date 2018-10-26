@@ -42,6 +42,7 @@ app.get("/v1/geocode/:lat/:lng", (req, res) => cached(req, res, require("./wrapp
 app.get("/v1/weather/:lat/:lng", (req, res) => cached(req, res, require("./wrappers/weather")));
 app.get("/v1/translate/:to/:q", (req, res) => cached(req, res, require("./wrappers/translate")));
 app.get("/v1/image/:q", (req, res) => cached(req, res, require("./wrappers/image")));
+app.post("/v1/describe", (req, res) => cached(req, res, require("./wrappers/describe")));
 app.get("/v1/screenshot/:url", (req, res) => cached(req, res, require("./wrappers/screenshot")));
 
 // Secured endpoints
@@ -54,6 +55,7 @@ app.get("/secure/geocode/:lat/:lng", (req, res) => secure.respond(req, res, requ
 app.get("/secure/weather/:lat/:lng", (req, res) => secure.respond(req, res, require("./wrappers/weather")));
 app.get("/secure/translate/:to/:q", (req, res) => secure.respond(req, res, require("./wrappers/translate")));
 app.get("/secure/image/:q", (req, res) => secure.respond(req, res, require("./wrappers/image")));
+app.post("/secure/describe", (req, res) => secure.respond(req, res, require("./wrappers/describe")));
 app.get("/secure/screenshot/:q", (req, res) => secure.respond(req, res, require("./wrappers/screenshot")));
 
 app.all("*", (req, res) => {
