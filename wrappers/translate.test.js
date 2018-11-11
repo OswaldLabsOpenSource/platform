@@ -5,7 +5,7 @@ test("translate hello world to french", () => {
 		.promise({ to: "fr", q: "Hello, world! How are you?" })
 		.then(data =>
 			expect(JSON.stringify(data)).toEqual(
-				'{"translatedText":"Bonjour le monde! Comment allez-vous?","detectedSourceLanguage":"en","originalText":"Hello, world! How are you?"}'
+				'{"translatedText":"Bonjour le monde! Comment vas-tu?","detectedSourceLanguage":"en","originalText":"Hello, world! How are you?"}'
 			)
 		);
 });
