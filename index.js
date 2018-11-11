@@ -45,6 +45,7 @@ app.get("/v1/translate/:to/:q", (req, res) => cached(req, res, require("./wrappe
 app.get("/v1/image/:q", (req, res) => cached(req, res, require("./wrappers/image")));
 app.post("/v1/describe", (req, res) => cached(req, res, require("./wrappers/describe")));
 app.get("/v1/screenshot/:url", (req, res) => cached(req, res, require("./wrappers/screenshot")));
+app.get("/v1/profile-picture/:email", (req, res) => cached(req, res, require("./wrappers/profilePicture")));
 
 // Secured endpoints
 const secure = require("./secure");
@@ -58,6 +59,7 @@ app.get("/secure/translate/:to/:q", (req, res) => secure.respond(req, res, requi
 app.get("/secure/image/:q", (req, res) => secure.respond(req, res, require("./wrappers/image")));
 app.post("/secure/describe", (req, res) => secure.respond(req, res, require("./wrappers/describe")));
 app.get("/secure/screenshot/:q", (req, res) => secure.respond(req, res, require("./wrappers/screenshot")));
+app.get("/secure/profile-picture/:email", (req, res) => secure.respond(req, res, require("./wrappers/profilePicture")));
 
 app.all("*", (req, res) => {
 	res.status(404).json({ error: "route not found" });

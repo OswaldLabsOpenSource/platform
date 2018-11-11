@@ -11,8 +11,12 @@ module.exports = (req, res, api) => {
 	// 	} else {
 			api.promise(Object.values(req.params).length ? req.params : req.body)
 				.then(r => {
-					res.json(r);
-					client.set(key, JSON.stringify(r));
+					if (r.redirectUri) {
+						res.redirect(r.redirectUri);
+					} else {
+						res.json(r);
+					}
+					// client.set(key, JSON.stringify(r));
 				})
 				.catch(e => {
 					try {
