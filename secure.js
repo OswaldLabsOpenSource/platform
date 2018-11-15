@@ -29,7 +29,7 @@ module.exports.respond = (req, res, api) => {
 			return res.status(401).json({ error: "unauthorized_endpoint", permissions: decoded.permissions, api: api.api });
 		if (typeof decoded.ip_restrictions === "object" && !decoded.ip_restrictions.includes(ipAddress))
 			return res.status(401).json({ error: "unauthorized_ip_address", ip_restrictions: decoded.ip_restrictions, ipAddress: ipAddress });
-		if (typeof decoded.domain_restrictions === "object" && !decoded.domain_restrictions.includes(req.headers.host))
+		if (typeof decoded.domain_restrictions === "object" && !decoded.domain_restrictions.includes(req.get("origin") || req.get("host")))
 			return res.status(401).json({ error: "unauthorized_cors_domain", domain_restrictions: decoded.domain_restrictions, domain: req.headers.host });
 		cached(req, res, api);
 	});
