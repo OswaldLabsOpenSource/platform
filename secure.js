@@ -29,7 +29,7 @@ module.exports.respond = (req, res, api) => {
 			return res.status(401).json({ error: "unauthorized_endpoint" });
 		if (typeof decoded.ip_restrictions === "object" && !decoded.ip_restrictions.includes(ipAddress))
 			return res.status(401).json({ error: "unauthorized_ip_address" });
-		if (typeof decoded.domain_restrictions === "object" && !decoded.domain_restrictions.includes(headers.host))
+		if (typeof decoded.domain_restrictions === "object" && !decoded.domain_restrictions.includes(req.headers.host))
 			return res.status(401).json({ error: "unauthorized_cors_domain" });
 		cached(req, res, api);
 	});
