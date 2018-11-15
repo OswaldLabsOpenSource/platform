@@ -26,14 +26,11 @@ module.exports.respond = (req, res, api) => {
 	jwt.verify(apiKey, process.env.JWT_SECRET, (error, decoded) => {
 		if (error) return res.status(401).json({ error: "invalid_api_key", details: error });
 		if (decoded.permissions !== "all" && typeof decoded.permissions === "object" && !decoded.permissions.includes(api.api))
-			console.log({ error: "unauthorized_endpoint", permissions: decoded.permissions, api: api.api });
-			return res.status(401).json({ error: "unauthorized_endpoint" });
+			return res.status(401).json({ error: "unauthorized_endpoint", permissions: decoded.permissions, api: api.api });
 		if (typeof decoded.ip_restrictions === "object" && !decoded.ip_restrictions.includes(ipAddress))
-			console.log({ error: "unauthorized_ip_address", ip_restrictions: decoded.ip_restrictions, ipAddress: ipAddress });
-			return res.status(401).json({ error: "unauthorized_ip_address" });
+			return res.status(401).json({ error: "unauthorized_ip_address", ip_restrictions: decoded.ip_restrictions, ipAddress: ipAddress });
 		if (typeof decoded.domain_restrictions === "object" && !decoded.domain_restrictions.includes(req.headers.host))
-			console.log({ error: "unauthorized_cors_domain", domain_restrictions: decoded.domain_restrictions, domain: req.headers.host });
-			return res.status(401).json({ error: "unauthorized_cors_domain" });
+			return res.status(401).json({ error: "unauthorized_cors_domain", domain_restrictions: decoded.domain_restrictions, domain: req.headers.host });
 		cached(req, res, api);
 	});
 };
