@@ -60,6 +60,7 @@ app.get("/secure/image/:q", (req, res) => secure.respond(req, res, require("./wr
 app.post("/secure/describe", (req, res) => secure.respond(req, res, require("./wrappers/describe")));
 app.get("/secure/screenshot/:q", (req, res) => secure.respond(req, res, require("./wrappers/screenshot")));
 app.get("/secure/profile-picture/:email", (req, res) => secure.respond(req, res, require("./wrappers/profilePicture")));
+app.get("/secure/sentiments/:text", (req, res) => secure.respond(req, res, require("./wrappers/sentiments")));
 
 app.all("*", (req, res) => {
 	res.status(404).json({ error: "route not found" });
