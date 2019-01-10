@@ -11,7 +11,11 @@ module.exports = (req, res, api) => {
 	// 	} else {
 			api.promise(Object.values(req.params).length ? req.params : req.body)
 				.then(r => {
-					if (r.redirectUri) {
+					if (r.file) {
+						res.contentType("image/png");
+						res.set("Content-Type", "image/png");
+						res.send(r.file);
+					} else if (r.redirectUri) {
 						res.redirect(r.redirectUri);
 					} else {
 						res.json(r);

@@ -9,7 +9,6 @@ const slowDown = require("express-slow-down");
 const app = express();
 
 app.use(bodyParser.json({ limit: "50mb" }));
-app.use(express.json());
 app.use(cors());
 app.enable("trust proxy");
 process.env.USER !== "anandchowdhary" && app.use(ua.middleware("UA-79176349-10", { cookieName: "oswald_labs_platform" }));
@@ -34,8 +33,13 @@ app.get("/", (req, res) => {
 	});
 });
 
-// Public endpoints
 const cached = require("./cached");
+app.get("/v1/screenshot/:url", (req, res) => cached(req, res, require("./wrappers/screenshot")));
+
+// JSON
+app.use(express.json());
+
+// Public endpoints
 app.get("/v1/ip/:ip", (req, res) => cached(req, res, require("./wrappers/ip")));
 app.get("/v1/reader/:url", (req, res) => cached(req, res, require("./wrappers/reader")));
 app.post("/v1/objects", (req, res) => cached(req, res, require("./wrappers/objects")));
@@ -44,7 +48,6 @@ app.get("/v1/weather/:lat/:lng", (req, res) => cached(req, res, require("./wrapp
 app.get("/v1/translate/:to/:q", (req, res) => cached(req, res, require("./wrappers/translate")));
 app.get("/v1/image/:q", (req, res) => cached(req, res, require("./wrappers/image")));
 app.post("/v1/describe", (req, res) => cached(req, res, require("./wrappers/describe")));
-app.get("/v1/screenshot/:url", (req, res) => cached(req, res, require("./wrappers/screenshot")));
 app.get("/v1/profile-picture/:email", (req, res) => cached(req, res, require("./wrappers/profilePicture")));
 
 // Secured endpoints

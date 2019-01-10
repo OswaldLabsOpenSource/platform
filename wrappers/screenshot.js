@@ -1,11 +1,15 @@
 const axios = require("axios");
+const fs = require("fs");
 
 const screenshot = params =>
 	new Promise((resolve, reject) => {
 		axios
-			.get(`https://api.microlink.io/?url=${params.url}&screenshot&filter=screenshot`)
+			.get(`http://api.screenshotlayer.com/api/capture?access_key=${process.env.SCREENSHOTLAYER}&url=${params.url}&viewport=1200x630&width=1200`)
 			.then(response => {
-				resolve(response.data.data.screenshot.url.url);
+				fs.writeFileSync("./cached/" + "params.url" + ".png", response.data);
+				resolve({
+					file: response.data
+				});
 			})
 			.catch(error => {
 				reject({ success: false, error: error.response.data.error });
