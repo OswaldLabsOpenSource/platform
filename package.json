@@ -37,7 +37,7 @@
     "jsonwebtoken": "^8.4.0",
     "md5": "^2.2.1",
     "microsoft-computer-vision": "^0.4.2",
-    "node-webshot": "^1.0.3",
+    "puppeteer": "^1.11.0",
     "redis": "^2.8.0",
     "universal-analytics": "^0.4.20"
   }
