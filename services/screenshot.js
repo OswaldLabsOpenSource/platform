@@ -20,9 +20,9 @@ module.exports = (req, res) => {
 			.then(() => {
 				res.sendFile(imagePath);
 			})
-			.catch(() => {
-				// Send error file
-				res.sendFile("imagePath");
+			.catch(e => {
+				console.log("Error!", e);
+				res.json(e);
 			});
 	}
 };
