@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const ua = require("universal-analytics");
 const bodyParser = require("body-parser");
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
@@ -33,6 +32,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/screenshot", (req, res) => require("./services/screenshot")(req, res));
+
+app.get("/config/:apiKey", (req, res) => require("./agastya/config")(req, res));
 
 app.all("*", (req, res) => {
 	res.status(404).json({ error: "route not found" });
