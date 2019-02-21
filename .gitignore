@@ -66,3 +66,6 @@ dump.rdb
 
 # Cache directory
 cache/*.png
+
+# Databases
+database/*.json

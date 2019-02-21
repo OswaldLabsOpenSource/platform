@@ -1,31 +1,13 @@
-const mongoose = require("mongoose");
-const schema = require("./schema");
-
-const Instance = mongoose.model("Instance", schema);
+const Fraud = require("fraud");
 
 module.exports = (req, res) => {
-	mongoose
-		.connect(
-			process.env.MONGO,
-			{ useNewUrlParser: true }
-		)
-		.then(() => {
-			Instance.find(
-				{
-					apiKey: req.params.apiKey.replace(".json", "")
-				},
-				(error, response) => {
-					if (error) {
-						res.status(500).json({ error });
-					} else {
-						if (response.length) {
-							res.json(response[0]);
-						} else {
-							res.status(404).json({ error: "invalid_key" });
-						}
-					}
-				}
-			);
-		})
-		.catch(error => res.status(500).json({ error }));
+	const database = new Fraud.default({
+		directory: "./database"
+	});
+	let apiKey = req.params.apiKey;
+	if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
+	database
+		.read(apiKey)
+		.then(config => res.json(config))
+		.catch(() => res.status(404).json({ error: "no_config" }));
 };
