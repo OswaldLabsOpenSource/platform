@@ -63,3 +63,12 @@ env.js
 
 # Dumps
 dump.rdb
+
+# Cache directory
+cache/*.png
+
+# Databases
+database/*.json
+
+# Constants
+constants.js
