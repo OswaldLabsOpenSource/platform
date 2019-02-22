@@ -48,13 +48,14 @@ app.put("/agastya/api-keys", (req, res) => require("./agastya/config").create(re
 app.get("/agastya/gdpr/export.csv", bruteforce.prevent, (req, res) => require("./agastya/elastic").export(req, res));
 app.get("/agastya/gdpr/export/:format", bruteforce.prevent, (req, res) => require("./agastya/elastic").export(req, res));
 app.get("/agastya/gdpr/delete", bruteforce.prevent, (req, res) => require("./agastya/elastic").delete(req, res));
+app.post("/agastya/secure-collect", (req, res) => require("./agastya/track")(req, res));
 
 app.get("/auth/details", (req, res) => require("./agastya/auth").details(req, res));
 app.patch("/auth/details", (req, res) => require("./agastya/auth").update(req, res));
-app.post("/auth/login", (req, res) => require("./agastya/auth").login(req, res));
-app.post("/auth/register", (req, res) => require("./agastya/auth").register(req, res));
-app.post("/auth/forgot", (req, res) => require("./agastya/auth").forgot(req, res));
-app.post("/auth/reset", (req, res) => require("./agastya/auth").reset(req, res));
+app.post("/auth/login", bruteforce.prevent, (req, res) => require("./agastya/auth").login(req, res));
+app.post("/auth/register", bruteforce.prevent, (req, res) => require("./agastya/auth").register(req, res));
+app.post("/auth/forgot", bruteforce.prevent, (req, res) => require("./agastya/auth").forgot(req, res));
+app.post("/auth/reset", bruteforce.prevent, (req, res) => require("./agastya/auth").reset(req, res));
 
 app.get("/billing/customer", (req, res) => require("./stripe").details(req, res));
 app.get("/billing/plans", (req, res) => require("./stripe").plans(req, res));
