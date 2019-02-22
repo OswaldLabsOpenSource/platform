@@ -423,9 +423,10 @@ binary-extensions@^1.0.0:
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-1.12.0.tgz#c2d780f53d45bba8317a8902d4ceeaf3a6385b14"
 
-bluebird@^3.4.7, bluebird@^3.5.0, bluebird@^3.5.x:
+bluebird@^3.4.1, bluebird@^3.4.7, bluebird@^3.5.0, bluebird@^3.5.x:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.3.tgz#7d01c6f9616c9a51ab0f8c549a79dfe6ec33efa7"
+  integrity sha512-/qKPUQlaW1OyR51WeCPBvRnAlnZFUJkCSG5HzGnuIqhgyJtF+T94lFnn33eiazjRm2LAHVy2guNnaq48X9SJuw==
 
 body-parser@1.18.3, body-parser@^1.18.3:
   version "1.18.3"
@@ -1398,10 +1399,12 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-fraud@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/fraud/-/fraud-2.0.0.tgz#5924213496ab0f4ce03cd323073ba6636afbf3a9"
-  integrity sha512-VXbUi3sdle2KDY4gABKXwmkomCVlCPPb2ge+vfakXi4MFIj2fAZz7+uf3qAgZlwIMuj6ypa267lRdd4CFZUP0w==
+fraud@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/fraud/-/fraud-3.1.0.tgz#44d129cee2b1dbc2c621c93cc034dc7c724c62bd"
+  integrity sha512-X7wt3rS5dTbxCEpIUkInVlkMDtgC4hzmX19SRTKK26AhrqfSiywWCaube895r1vj3Ry9YwJO4fwJcSj3S/Pl5w==
+  dependencies:
+    promise-serial "^0.1.5"
 
 fresh@0.5.2:
   version "0.5.2"
@@ -3451,6 +3454,13 @@ progress@^2.0.1:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
+
+promise-serial@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/promise-serial/-/promise-serial-0.1.5.tgz#68fb4d0e283c912459e02377a26a8d067bf567d1"
+  integrity sha512-WyxsnHCk/dr3ZDckvtadj1X4/YuOUrGhIYKmnVnOyC3DOLq4xY/iyEMMjMtSe1aE8JYw1z/nOTetrMqRrd4luQ==
+  dependencies:
+    bluebird "^3.4.1"
 
 prompts@^0.1.9:
   version "0.1.14"
