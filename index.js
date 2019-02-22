@@ -4,6 +4,9 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
+const brute = require("express-brute");
+const store = new brute.MemoryStore();
+const bruteforce = new brute(store);
 
 const app = express();
 
@@ -41,6 +44,10 @@ app.get("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").r
 app.patch("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").update(req, res));
 app.delete("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").delete(req, res));
 app.put("/agastya/api-keys", (req, res) => require("./agastya/config").create(req, res));
+
+app.get("/agastya/gdpr/export.csv", bruteforce.prevent, (req, res) => require("./agastya/elastic").export(req, res));
+app.get("/agastya/gdpr/export/:format", bruteforce.prevent, (req, res) => require("./agastya/elastic").export(req, res));
+app.get("/agastya/gdpr/delete", bruteforce.prevent, (req, res) => require("./agastya/elastic").delete(req, res));
 
 app.get("/auth/details", (req, res) => require("./agastya/auth").details(req, res));
 app.patch("/auth/details", (req, res) => require("./agastya/auth").update(req, res));

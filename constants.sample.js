@@ -16,5 +16,9 @@ module.exports = {
 	mail: {
 		email: "sample@example.com",
 		password: "email-password"
+	},
+	aws: {
+		access: "aws-access-key",
+		secret: "aws-secret-key"
 	}
 };
