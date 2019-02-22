@@ -79,3 +79,78 @@ module.exports.create = (req, res) => {
 		res.json({ error: "no_token" });
 	}
 };
+
+module.exports.update = (req, res) => {
+	if (req.get("Authorization")) {
+		verifyToken(
+			req.get("Authorization"),
+			token => {
+				let id = 0;
+				try {
+					id = token.user.id;
+				} catch (e) {}
+				let apiKey = req.params.apiKey;
+				if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
+				delete req.body.owner;
+				database
+					.exists(apiKey)
+					.then(exists => {
+						if (exists) return apiKey;
+						throw new Error("does-not-exist");
+					})
+					.then(() => database.read(apiKey))
+					.then(contents => {
+						if (parseInt(contents.owner) === parseInt(id)) return contents;
+						throw new Error("not-owner");
+					})
+					.then(() => database.update(apiKey, req.body))
+					.then(() => res.json({ updated: apiKey }))
+					.catch(() => res.status(500).json({ error: "error" }));
+			},
+			() => {
+				res.status(401);
+				res.json({ error: "invalid_token" });
+			}
+		);
+	} else {
+		res.status(422);
+		res.json({ error: "no_token" });
+	}
+};
+
+module.exports.delete = (req, res) => {
+	if (req.get("Authorization")) {
+		verifyToken(
+			req.get("Authorization"),
+			token => {
+				let id = 0;
+				try {
+					id = token.user.id;
+				} catch (e) {}
+				let apiKey = req.params.apiKey;
+				if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
+				database
+					.exists(apiKey)
+					.then(exists => {
+						if (exists) return apiKey;
+						throw new Error("does-not-exist");
+					})
+					.then(() => database.read(apiKey))
+					.then(contents => {
+						if (parseInt(contents.owner) === parseInt(id)) return contents;
+						throw new Error("not-owner");
+					})
+					.then(() => database.delete(apiKey))
+					.then(() => res.json({ deleted: apiKey }))
+					.catch(() => res.status(500).json({ error: "error" }));
+			},
+			() => {
+				res.status(401);
+				res.json({ error: "invalid_token" });
+			}
+		);
+	} else {
+		res.status(422);
+		res.json({ error: "no_token" });
+	}
+};

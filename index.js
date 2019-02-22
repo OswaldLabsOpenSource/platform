@@ -35,6 +35,8 @@ app.get("/screenshot", (req, res) => require("./services/screenshot")(req, res))
 
 app.get("/agastya/api-keys", (req, res) => require("./agastya/config").list(req, res));
 app.get("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").read(req, res));
+app.patch("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").update(req, res));
+app.delete("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").delete(req, res));
 app.put("/agastya/api-keys", (req, res) => require("./agastya/config").create(req, res));
 
 app.get("/auth/details", (req, res) => require("./agastya/auth").details(req, res));
