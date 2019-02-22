@@ -33,7 +33,9 @@ app.get("/", (req, res) => {
 
 app.get("/screenshot", (req, res) => require("./services/screenshot")(req, res));
 
-app.get("/agastya/config/:apiKey", (req, res) => require("./agastya/config").read(req, res));
+app.get("/agastya/api-keys", (req, res) => require("./agastya/config").list(req, res));
+app.get("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").read(req, res));
+app.put("/agastya/api-keys", (req, res) => require("./agastya/config").create(req, res));
 
 app.get("/auth/details", (req, res) => require("./agastya/auth").details(req, res));
 app.patch("/auth/details", (req, res) => require("./agastya/auth").update(req, res));
@@ -41,7 +43,6 @@ app.post("/auth/login", (req, res) => require("./agastya/auth").login(req, res))
 app.post("/auth/register", (req, res) => require("./agastya/auth").register(req, res));
 app.post("/auth/forgot", (req, res) => require("./agastya/auth").forgot(req, res));
 app.post("/auth/reset", (req, res) => require("./agastya/auth").reset(req, res));
-app.get("/auth/api-keys", (req, res) => require("./agastya/config").list(req, res));
 
 app.all("*", (req, res) => {
 	res.status(404).json({ error: "route not found" });
