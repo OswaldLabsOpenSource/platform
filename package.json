@@ -40,6 +40,7 @@
     "microsoft-computer-vision": "^0.4.2",
     "puppeteer": "^1.11.0",
     "redis": "^2.8.0",
+    "simple-git": "^1.107.0",
     "universal-analytics": "^0.4.20"
   }
 }

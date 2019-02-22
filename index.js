@@ -33,7 +33,7 @@ app.get("/", (req, res) => {
 
 app.get("/screenshot", (req, res) => require("./services/screenshot")(req, res));
 
-app.get("/config/:apiKey", (req, res) => require("./agastya/config")(req, res));
+app.get("/agastya/config/:apiKey", (req, res) => require("./agastya/config").read(req, res));
 
 app.all("*", (req, res) => {
 	res.status(404).json({ error: "route not found" });
