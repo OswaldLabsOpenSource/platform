@@ -6,7 +6,6 @@ const database = new Fraud.default({
 		require("simple-git")()
 			.add("*")
 			.commit("Update Agastya database")
-			.addRemote("origin", "https://github.com/AnandChowdhary/agastya-database.git")
 			.push("origin", "master");
 	}
 });
