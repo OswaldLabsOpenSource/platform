@@ -46,6 +46,15 @@ app.post("/auth/register", (req, res) => require("./agastya/auth").register(req,
 app.post("/auth/forgot", (req, res) => require("./agastya/auth").forgot(req, res));
 app.post("/auth/reset", (req, res) => require("./agastya/auth").reset(req, res));
 
+app.get("/billing/customer", (req, res) => require("./stripe").details(req, res));
+app.get("/billing/plans", (req, res) => require("./stripe").plans(req, res));
+app.get("/billing/cards", (req, res) => require("./stripe").cards(req, res));
+app.patch("/billing/cards/:cardId", (req, res) => require("./stripe").updateCard(req, res));
+app.delete("/billing/cards/:cardId", (req, res) => require("./stripe").cards(req, res));
+app.get("/billing/invoices", (req, res) => require("./stripe").invoices(req, res));
+app.get("/billing/subscriptions", (req, res) => require("./stripe").subscriptions(req, res));
+app.put("/billing/subscriptions", (req, res) => require("./stripe").createSubscription(req, res));
+
 app.all("*", (req, res) => {
 	res.status(404).json({ error: "route not found" });
 });
