@@ -20,5 +20,9 @@ module.exports = {
 	aws: {
 		access: "aws-access-key",
 		secret: "aws-secret-key"
+	},
+	recaptcha: {
+		site: "recaptcha-site-key",
+		secret: "recaptcha-secret-key"
 	}
 };

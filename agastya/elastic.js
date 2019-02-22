@@ -1,5 +1,5 @@
 const AWS = require("aws-sdk");
-const escapeElastic = require("elasticsearch-sanitize");
+const sanitize = require("elasticsearch-sanitize");
 const md5 = require("md5");
 const jsonExport = require("jsonexport");
 const constants = require("../constants");
@@ -23,7 +23,7 @@ module.exports.export = (req, res) => {
 	ip = ip === "::1" ? "145.20.17.222" : ip;
 	client
 		.search({
-			q: `ip:${md5(ip)}`
+			q: `ip:${sanitize(md5(ip))}`
 		})
 		.then(response => {
 			if (req.params.format === "json") {
@@ -50,7 +50,7 @@ module.exports.delete = (req, res) => {
 		{
 			index: `${new Date().getUTCFullYear()}-*`,
 			body: {
-				query: { match: { ip: md5(ip) } },
+				query: { match: { ip: sanitize(md5(ip)) } },
 				script: { inline: "ctx._source.ip = 'retracted-as-per-gdpr-request'" }
 			}
 		},

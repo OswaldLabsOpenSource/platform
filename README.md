@@ -27,7 +27,7 @@ Oswald Labs Platform is a set of open, extensible APIs and SDKs to build apps. T
 
 ### Agastya API keys
 
-**Note:** APIs with the 🔒 (lock) emoji require Bearer token-based authentication. You can generate a token by using Oswald Labs Account APIs.
+**Note:** APIs with the 🔒 (lock) emoji require Bearer token-based authentication. You can generate a token by using Oswald Labs Account APIs. APIs with the 🔑 (key) emoji require captcha validation.
 
 | Endpoint | Details
 | - | - |
@@ -44,7 +44,7 @@ Oswald Labs Platform is a set of open, extensible APIs and SDKs to build apps. T
 | `GET /auth/details` | 🔒 Returns account details |
 | `PATCH /auth/details` | 🔒 Updates account details |
 | `POST /auth/login` | Generates a login token |
-| `POST /auth/register` | Create a new account |
+| `POST /auth/register` | 🔑 Create a new account |
 | `POST /auth/forgot` | Emails a forgot password link |
 | `POST /auth/reset` | 🔒 Requests a password reset |
 

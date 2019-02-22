@@ -5,6 +5,11 @@ const jwt = require("jsonwebtoken");
 const verifyToken = require("./token");
 const email = require("./email");
 const stripe = require("../stripe");
+const recaptcha = require("recaptcha2");
+const recaptcha = new recaptcha({
+	siteKey: constants.recaptcha.site,
+	secretKey: constants.recaptcha.secret
+});
 
 module.exports.login = (req, res) => {
 	pool.getConnection(function(err, connection) {
@@ -47,12 +52,13 @@ module.exports.login = (req, res) => {
 							}
 						);
 					} else {
+						connection.release();
 						res.status(401);
 						res.json({ error: "invalid_credentials" });
-						connection.release();
 					}
 				});
 			} else {
+				connection.release();
 				res.status(422);
 				res.json({ error: "input_all_fields", fields: req.body });
 			}
@@ -140,12 +146,13 @@ module.exports.forgot = (req, res) => {
 							if (error) throw error;
 						});
 					} else {
+						connection.release();
 						res.status(401);
 						res.json({ error: "invalid_email" });
-						connection.release();
 					}
 				});
 			} else {
+				connection.release();
 				res.status(422);
 				res.json({ error: "input_all_fields" });
 			}
@@ -159,65 +166,82 @@ module.exports.register = (req, res) => {
 			res.status(500);
 			res.json({ error: "connection_error" });
 		} else {
-			if (req.body.name && req.body.email) {
-				connection.query("SELECT id FROM users WHERE email=? LIMIT 1", [req.body.email], function(
-					error,
-					results,
-					fields
-				) {
-					if (results.length === 0) {
-						const resetCode = crypto.randomBytes(20).toString("hex");
-						const apiKey = crypto.randomBytes(5).toString("hex");
-						stripe.customers.create(
-							{
-								email: req.body.email
-							},
-							function(err, customer) {
-								if (err) {
-									res.json({ error: err.message });
-								} else {
-									const currentTime = new Date()
-										.toISOString()
-										.slice(0, 19)
-										.replace("T", " ");
-									connection.query(
-										"INSERT INTO users (email, name, password, reset_code, api_key, subscribed, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)",
-										[req.body.email, req.body.name, "not set", resetCode, apiKey, customer.id, currentTime],
-										function(error) {
-											connection.release();
-											email(
-												{
-													to: req.body.email,
-													subject: "Verify Email / Agastya by Oswald Labs",
-													text: `Your code is ${resetCode}`,
-													html: `<p>Your code is <strong>${resetCode}</strong></p>`
-												},
-												(err, info) => {
-													if (err) {
-														res.json({
-															error: "unable_email",
-															details: err
-														});
-													} else {
-														res.json({
-															sent: info
-														});
-													}
+			if (req.body.name && req.body.email && req.body.recaptcha) {
+				recaptcha
+					.validate(req.body.recaptcha)
+					.then(() => {
+						connection.query("SELECT id FROM users WHERE email=? LIMIT 1", [req.body.email], function(
+							error,
+							results,
+							fields
+						) {
+							if (results.length === 0) {
+								const resetCode = crypto.randomBytes(20).toString("hex");
+								const apiKey = crypto.randomBytes(5).toString("hex");
+								stripe.customers.create(
+									{
+										email: req.body.email
+									},
+									function(err, customer) {
+										if (err) {
+											res.json({ error: err.message });
+										} else {
+											const currentTime = new Date()
+												.toISOString()
+												.slice(0, 19)
+												.replace("T", " ");
+											connection.query(
+												"INSERT INTO users (email, name, password, reset_code, api_key, subscribed, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)",
+												[
+													req.body.email,
+													req.body.name,
+													"not set",
+													resetCode,
+													apiKey,
+													customer.id,
+													currentTime
+												],
+												function(error) {
+													connection.release();
+													email(
+														{
+															to: req.body.email,
+															subject: "Verify Email / Agastya by Oswald Labs",
+															text: `Your code is ${resetCode}`,
+															html: `<p>Your code is <strong>${resetCode}</strong></p>`
+														},
+														(err, info) => {
+															if (err) {
+																res.json({
+																	error: "unable_email",
+																	details: err
+																});
+															} else {
+																res.json({
+																	sent: info
+																});
+															}
+														}
+													);
+													if (error) throw error;
 												}
 											);
-											if (error) throw error;
 										}
-									);
-								}
+									}
+								);
+							} else {
+								connection.release();
+								res.status(409);
+								res.json({ error: "email_in_use" });
 							}
-						);
-					} else {
-						res.status(409);
-						res.json({ error: "email_in_use" });
+						});
+					})
+					.catch(() => {
 						connection.release();
-					}
-				});
+						res.status(400).json({ error: "invalid_captcha" });
+					});
 			} else {
+				connection.release();
 				res.status(422);
 				res.json({ error: "input_all_fields" });
 			}
@@ -283,12 +307,13 @@ module.exports.reset = (req, res) => {
 							}
 						);
 					} else {
+						connection.release();
 						res.status(401);
 						res.json({ error: "invalid_code" });
-						connection.release();
 					}
 				});
 			} else {
+				connection.release();
 				res.status(422);
 				res.json({ error: "input_all_fields" });
 			}
@@ -337,16 +362,19 @@ module.exports.update = (req, res) => {
 								if (error) throw error;
 							});
 						} else {
+							connection.release();
 							res.status(422);
 							res.json({ error: "input_all_fields" });
 						}
 					},
 					() => {
+						connection.release();
 						res.status(401);
 						res.json({ error: "invalid_token" });
 					}
 				);
 			} else {
+				connection.release();
 				res.status(422);
 				res.json({ error: "no_token" });
 			}
