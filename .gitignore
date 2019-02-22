@@ -69,3 +69,6 @@ cache/*.png
 
 # Databases
 database/*.json
+
+# Constants
+constants.js
