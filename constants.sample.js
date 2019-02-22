@@ -10,5 +10,9 @@ module.exports = {
 		user: "mysql-user",
 		password: "mysql-password",
 		database: "mysql-database"
+	},
+	mail: {
+		email: "sample@example.com",
+		password: "email-password"
 	}
 };

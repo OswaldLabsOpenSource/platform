@@ -40,8 +40,10 @@
     "md5": "^2.2.1",
     "microsoft-computer-vision": "^0.4.2",
     "mysql": "^2.16.0",
+    "nodemailer": "^5.1.1",
     "puppeteer": "^1.11.0",
     "redis": "^2.8.0",
+    "stripe": "^6.25.1",
     "universal-analytics": "^0.4.20"
   }
 }
