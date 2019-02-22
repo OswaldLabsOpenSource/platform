@@ -191,7 +191,7 @@ module.exports.register = (req, res) => {
 												.slice(0, 19)
 												.replace("T", " ");
 											connection.query(
-												"INSERT INTO users (email, name, password, reset_code, api_key, subscribed, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)",
+												"INSERT INTO users (email, name, password, reset_code, api_key, subscribed, createdAt, affiliate_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
 												[
 													req.body.email,
 													req.body.name,
@@ -199,7 +199,8 @@ module.exports.register = (req, res) => {
 													resetCode,
 													apiKey,
 													customer.id,
-													currentTime
+													currentTime,
+													req.body.affiliate_id || NULL
 												],
 												function(error) {
 													connection.release();
