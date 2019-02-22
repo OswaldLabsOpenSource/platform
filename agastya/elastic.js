@@ -26,10 +26,17 @@ module.exports.export = (req, res) => {
 			q: `ip:${sanitize(md5(ip))}`
 		})
 		.then(response => {
+			let data = [];
+			let originalData = response.hits.hits || [];
+			for (let i = 0; i < originalData.length; i++) {
+				try {
+					data.push(originalData[i]._source);
+				} catch (e) {}
+			}
 			if (req.params.format === "json") {
-				res.json(response.hits.hits || []);
+				res.json(data);
 			} else {
-				jsonExport(response.hits.hits || [], (error, csv) => {
+				jsonExport(data, (error, csv) => {
 					if (error) return res.status(400).json({ error: true });
 					res.attachment("export.csv");
 					res.send(csv);
