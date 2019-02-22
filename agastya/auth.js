@@ -5,8 +5,8 @@ const jwt = require("jsonwebtoken");
 const verifyToken = require("./token");
 const email = require("./email");
 const stripe = require("../stripe");
-const recaptcha = require("recaptcha2");
-const recaptcha = new recaptcha({
+const reCaptcha = require("recaptcha2");
+const recaptcha = new reCaptcha({
 	siteKey: constants.recaptcha.site,
 	secretKey: constants.recaptcha.secret
 });
