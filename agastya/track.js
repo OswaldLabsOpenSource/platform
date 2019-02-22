@@ -6,6 +6,19 @@ const geoLite2 = require("geolite2");
 const md5 = require("md5");
 const atob = require("atob");
 const Fraud = require("fraud");
+const package = require("../package.json");
+const AWS = require("aws-sdk");
+const constants = require("../constants");
+
+AWS.config.update({
+	credentials: new AWS.Credentials(constants.awsElasticSearch.access, constants.awsElasticSearch.secret),
+	region: "eu-west-3"
+});
+
+const client = require("elasticsearch").Client({
+	host: "search-a11y-l54fuy34twgibou26fo4g2pmr4.eu-west-3.es.amazonaws.com",
+	connectionClass: require("http-aws-es")
+});
 const database = new Fraud.default({
 	directory: "./agastya-database"
 });
@@ -94,6 +107,7 @@ module.exports = (req, res) => {
 	}
 
 	// Set basics
+	data.client = `platform-${package.version}`;
 	data.ip = md5(ip);
 	if (typeof data.event === "object") {
 		data.event = data.event || {};
@@ -214,18 +228,26 @@ module.exports = (req, res) => {
 					data.date = currentDate.toISOString();
 
 					// Save this to elasticsearch
-
-					res.json({
-						status: "success",
-						response: data,
-						result: true,
-						constants: {
-							accessibility_options: "Accessibility options",
-							loading: "Loading",
-							close: "Close",
-							eu_laws: isEuCountry(data)
-						}
-					});
+					client
+						.index({
+							index: `${currentDate.getUTCFullYear()}-${currentDate.getUTCMonth() + 1}-${currentDate.getUTCDate()}`,
+							type: "pageview",
+							body: data
+						})
+						.then(result => {
+							res.json({
+								status: "success",
+								response: data,
+								result,
+								constants: {
+									accessibility_options: "Accessibility options",
+									loading: "Loading",
+									close: "Close",
+									eu_laws: isEuCountry(data)
+								}
+							});
+						})
+						.catch(() => res.status(500).json({ error: "internal_error" }));
 				})
 				.catch(() => res.status(500).json({ error: "internal_error" }));
 		})

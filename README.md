@@ -24,6 +24,7 @@ Oswald Labs Platform is a set of open, extensible APIs and SDKs to build apps. T
 | `GET /agastya/gdpr/export.csv` | Data export CSV file |
 | `GET /agastya/gdpr/export/:format` | Data export in JSON/CSV |
 | `GET /agastya/gdpr/delete` | JSON number of deleted items |
+| `GET /agastya/secure-collect` | Anonymously track an event |
 
 ### Agastya API keys
 
