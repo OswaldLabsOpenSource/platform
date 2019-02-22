@@ -32,6 +32,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/screenshot", (req, res) => require("./services/screenshot")(req, res));
+app.get("/reader", (req, res) => require("./services/reader")(req, res));
+app.post("/describe", (req, res) => require("./services/describe")(req, res));
+app.post("/reader", (req, res) => require("./services/reader")(req, res));
 
 app.get("/agastya/api-keys", (req, res) => require("./agastya/config").list(req, res));
 app.get("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").read(req, res));

@@ -4,6 +4,8 @@ module.exports = {
 	encryptionKey: "encryption-key",
 	stripe: "stripe-live-api-key",
 	master: "hashed-master",
+	azure: "azure-api-key",
+	mercury: "mercury-api-key",
 	mysql: {
 		host: "mysql-host",
 		port: "mysql-port",
