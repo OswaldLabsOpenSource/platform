@@ -140,3 +140,69 @@ module.exports.recents = (req, res) => {
 		res.json({ error: "no_token" });
 	}
 };
+
+module.exports.explore = (req, res) => {
+	if (req.get("Authorization")) {
+		if (!req.body.apiKey && req.body.fingerprint) return res.status(401).json({ error: "incomplete_fields" });
+		verifyToken(
+			req.get("Authorization"),
+			token => {
+				let id = 0;
+				try {
+					id = token.user.id;
+				} catch (e) {}
+				let apiKey = req.body.apiKey || "";
+				if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
+				delete req.body.owner;
+				database
+					.read(apiKey)
+					.then(contents => {
+						if (parseInt(contents.owner) === parseInt(id)) return contents;
+						throw new Error("not-owner");
+					})
+					.then(() =>
+						client.search({
+							index: "2019-*",
+							body: {
+								size: 100,
+								query: {
+									bool: {
+										must: [
+											{
+												match: {
+													api_key: apiKey
+												}
+											},
+											{
+												match: {
+													combined_fp: req.body.fingerprint
+												}
+											}
+										]
+									}
+								},
+								sort: [
+									{
+										date: { order: "desc" }
+									}
+								],
+								size: parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10
+							}
+						})
+					)
+					.then(response => res.json(response))
+					.catch(error => {
+						console.log("error", error.toJSON());
+						res.status(500).json({ error: "error" });
+					});
+			},
+			() => {
+				res.status(401);
+				res.json({ error: "invalid_token" });
+			}
+		);
+	} else {
+		res.status(422);
+		res.json({ error: "no_token" });
+	}
+};

@@ -285,20 +285,26 @@ module.exports.reset = (req, res) => {
 											[userId],
 											function(error, results, fields) {
 												connection.release();
-												const user = results[0];
-												jwt.sign(
-													{ user },
-													constants.secret,
-													{
-														expiresIn: "1 day"
-													},
-													function(err, token) {
-														res.json({
-															user: user,
-															token: token
-														});
-													}
-												);
+												if (results.length === 1) {
+													const user = results[0];
+													jwt.sign(
+														{ user },
+														constants.secret,
+														{
+															expiresIn: "1 day"
+														},
+														function(err, token) {
+															res.json({
+																user: user,
+																token: token
+															});
+														}
+													);
+												} else {
+													res.json({
+														updated: true
+													});
+												}
 												if (error) throw error;
 											}
 										);
