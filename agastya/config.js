@@ -7,7 +7,7 @@ const database = new Fraud.default({
 });
 
 module.exports.read = (req, res) => {
-	let apiKey = req.params.apiKey;
+	let apiKey = req.params.apiKey || "";
 	if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
 	database
 		.read(apiKey)
@@ -89,7 +89,7 @@ module.exports.update = (req, res) => {
 				try {
 					id = token.user.id;
 				} catch (e) {}
-				let apiKey = req.params.apiKey;
+				let apiKey = req.params.apiKey || "";
 				if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
 				delete req.body.owner;
 				database
@@ -127,7 +127,7 @@ module.exports.delete = (req, res) => {
 				try {
 					id = token.user.id;
 				} catch (e) {}
-				let apiKey = req.params.apiKey;
+				let apiKey = req.params.apiKey || "";
 				if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
 				database
 					.exists(apiKey)

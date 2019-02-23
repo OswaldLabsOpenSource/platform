@@ -48,6 +48,7 @@ app.put("/agastya/api-keys", (req, res) => require("./agastya/config").create(re
 app.get("/agastya/gdpr/export.csv", bruteforce.prevent, (req, res) => require("./agastya/elastic").export(req, res));
 app.get("/agastya/gdpr/export/:format", bruteforce.prevent, (req, res) => require("./agastya/elastic").export(req, res));
 app.get("/agastya/gdpr/delete", bruteforce.prevent, (req, res) => require("./agastya/elastic").delete(req, res));
+app.post("/agastya/analytics/recents", (req, res) => require("./agastya/elastic").recents(req, res));
 app.post("/agastya/secure-collect", (req, res) => require("./agastya/track")(req, res));
 
 app.get("/auth/details", (req, res) => require("./agastya/auth").details(req, res));
