@@ -126,7 +126,6 @@ module.exports.recents = (req, res) => {
 					)
 					.then(response => res.json(response))
 					.catch(error => {
-						console.log("error", error.toJSON());
 						res.status(500).json({ error: "error" });
 					});
 			},
@@ -192,7 +191,6 @@ module.exports.explore = (req, res) => {
 					)
 					.then(response => res.json(response))
 					.catch(error => {
-						console.log("error", error.toJSON());
 						res.status(500).json({ error: "error" });
 					});
 			},
