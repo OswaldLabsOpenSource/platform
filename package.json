@@ -1,6 +1,6 @@
 {
   "name": "platform",
-  "version": "2.0.12",
+  "version": "2.0.13",
   "main": "index.js",
   "repository": "https://github.com/AnandChowdhary/undrawcdn",
   "author": "Anand Chowdhary <anandchowdhary@gmail.com>",
@@ -43,7 +43,7 @@
     "express-rate-limit": "^3.3.2",
     "express-slow-down": "^1.1.1",
     "form-data": "^2.3.3",
-    "fraud": "^4.0.0",
+    "fraud": "^4.1.0",
     "geolite2": "^1.2.1",
     "google-translate": "^2.2.0",
     "googleapis": "^35.0.0",

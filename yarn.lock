@@ -1557,10 +1557,10 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-fraud@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/fraud/-/fraud-4.0.0.tgz#fdb7891f4358c6627eb8f33adb53a5b245cc21f6"
-  integrity sha512-z2kTWO4rCcvoY322f+HYuIFUj3RW+9UZXz9Zx6EAhe8PYgcIT4MsCueW2I2tcdn1LjbFzUhjALZvBfaymmCIqg==
+fraud@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/fraud/-/fraud-4.1.0.tgz#b8f080c553f251ff6076ab3d3b1c74481deb0e2e"
+  integrity sha512-bAwvHAQLygotP/yyVRouB7uyMxEms3v/8O2RNYRkr9ymku6jYrqfS3Uzh09TrPRa8gh161jQRYxdyMWhY17FAw==
   dependencies:
     promise-serial "^0.1.5"
 
