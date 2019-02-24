@@ -9,7 +9,8 @@ const constants = require("../constants");
 const Fraud = require("fraud");
 
 const database = new Fraud.default({
-	directory: "./agastya-database"
+	directory: "./agastya-database",
+	softDelete: true
 });
 
 AWS.config.update({

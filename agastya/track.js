@@ -20,7 +20,8 @@ const client = require("elasticsearch").Client({
 	connectionClass: require("http-aws-es")
 });
 const database = new Fraud.default({
-	directory: "./agastya-database"
+	directory: "./agastya-database",
+	softDelete: true
 });
 
 const isEuCountry = data => {

@@ -3,7 +3,8 @@ const verifyToken = require("./token");
 const crypto = require("crypto");
 
 const database = new Fraud.default({
-	directory: "./agastya-database"
+	directory: "./agastya-database",
+	softDelete: true
 });
 
 module.exports.read = (req, res) => {
