@@ -7,8 +7,10 @@ const slowDown = require("express-slow-down");
 const brute = require("express-brute");
 const store = new brute.MemoryStore();
 const bruteforce = new brute(store);
+const crons = require("./crons");
 
 const app = express();
+crons();
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(cors());
