@@ -143,7 +143,7 @@ module.exports.delete = (req, res) => {
 					})
 					.then(() => database.delete(apiKey))
 					.then(() => res.json({ deleted: apiKey }))
-					.catch(() => res.status(500).json({ error: "error" }));
+					.catch(error => { res.status(500).json({ error: "error" }); console.log("GoT", error); });
 			},
 			() => {
 				res.status(401);
