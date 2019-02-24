@@ -58,7 +58,7 @@ const isEuCountry = data => {
 };
 
 module.exports = (req, res) => {
-	if (!req.body.api_key) return res.status(401).json({ error: "no_api_key" });
+	if (!(req.body.api_key || req.params.api_key)) return res.status(401).json({ error: "no_api_key" });
 
 	// Global IP address
 	let ip =
@@ -176,7 +176,7 @@ module.exports = (req, res) => {
 
 	// Validate API key
 	database
-		.read(req.body.api_key)
+		.read((req.body.api_key || req.params.api_key))
 		.then(config => {
 			const domain = data.url_domain ? data.url_domain.replace("www.", "") : null;
 			const domains = config.domains || [];
