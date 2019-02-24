@@ -72,3 +72,4 @@ database/*.json
 
 # Constants
 constants.js
+data.json

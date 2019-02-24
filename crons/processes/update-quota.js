@@ -3,6 +3,8 @@ const Fraud = require("fraud");
 const serial = require("promise-serial");
 const constants = require("../../constants");
 const pool = require("../../database");
+const fs = require("fs");
+const path = require("path");
 
 const database = new Fraud.default({
 	directory: "./agastya-database",
@@ -101,7 +103,14 @@ module.exports = () => {
 			);
 			serial(userPromises).then(() => {
 				console.log("Finished: total this month", grandTotal);
-				process.exit();
+				fs.writeFile(
+					path.join(__dirname, "..", "..", "data.json"),
+					JSON.stringify({
+						eventsThisMonth: grandTotal,
+						lastUpdated: new Date()
+					}),
+					() => process.exit()
+				);
 			});
 		})
 		.catch(error => console.log("Got error", error));
