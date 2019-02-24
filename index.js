@@ -52,7 +52,7 @@ app.get("/agastya/analytics/quota", (req, res) => require("./agastya/elastic").q
 app.post("/agastya/analytics/graphs", (req, res) => require("./agastya/elastic").graphs(req, res));
 app.post("/agastya/analytics/sorted", (req, res) => require("./agastya/elastic").sorted(req, res));
 app.post("/agastya/analytics/explore", (req, res) => require("./agastya/elastic").explore(req, res));
-app.post("/agastya/analytics/explore", (req, res) => require("./agastya/elastic").explore(req, res));
+app.post("/agastya/analytics/recents", (req, res) => require("./agastya/elastic").recents(req, res));
 app.post("/agastya/secure-collect", (req, res) => require("./agastya/track")(req, res));
 
 app.get("/auth/details", (req, res) => require("./agastya/auth").details(req, res));
