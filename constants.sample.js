@@ -6,6 +6,7 @@ module.exports = {
 	master: "hashed-master",
 	azure: "azure-api-key",
 	mercury: "mercury-api-key",
+	elastic: "elastic-search-endpoint.com",
 	mysql: {
 		host: "mysql-host",
 		port: "mysql-port",

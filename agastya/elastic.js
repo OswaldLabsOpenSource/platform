@@ -19,7 +19,7 @@ AWS.config.update({
 });
 
 const client = require("elasticsearch").Client({
-	host: "search-a11y-l54fuy34twgibou26fo4g2pmr4.eu-west-3.es.amazonaws.com",
+	host: constants.elastic,
 	connectionClass: require("http-aws-es")
 });
 

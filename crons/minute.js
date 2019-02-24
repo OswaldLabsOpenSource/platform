@@ -1,3 +1,1 @@
-module.exports = () => {
-	console.log("Reachedhere");
-};
+module.exports = () => {};
