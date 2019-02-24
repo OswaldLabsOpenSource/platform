@@ -1,6 +1,8 @@
 const AWS = require("aws-sdk");
 const sanitize = require("elasticsearch-sanitize");
+const pool = require("../database");
 const verifyToken = require("./token");
+const serial = require("promise-serial");
 const md5 = require("md5");
 const jsonExport = require("jsonexport");
 const constants = require("../constants");
@@ -68,9 +70,9 @@ module.exports.delete = (req, res) => {
 				script: { inline: "ctx._source.ip = 'retracted-as-per-gdpr-request'" }
 			}
 		},
-		(error, respose) => {
+		(error, response) => {
 			if (error) return res.status(500).json({ error: "unable_to_delete" });
-			res.json({ deleted: respose.updated });
+			res.json({ deleted: response.updated });
 		}
 	);
 };
@@ -325,6 +327,113 @@ module.exports.graphs = (req, res) => {
 					.then(response => res.json(response))
 					.catch(error => {
 						console.log(error);
+						res.status(500).json({ error: "error" });
+					});
+			},
+			() => {
+				res.status(401);
+				res.json({ error: "invalid_token" });
+			}
+		);
+	} else {
+		res.status(422);
+		res.json({ error: "no_token" });
+	}
+};
+
+module.exports.quota = (req, res) => {
+	if (req.get("Authorization")) {
+		verifyToken(
+			req.get("Authorization"),
+			token => {
+				let id = 0;
+				try {
+					id = token.user.id;
+				} catch (e) {}
+				delete req.body.owner;
+				const responses = [];
+				database
+					.readAll()
+					.then(list => {
+						const apiKeys = {};
+						Object.keys(list).forEach(key => {
+							if (list.hasOwnProperty(key))
+								if (parseInt(list[key].owner) === parseInt(id)) apiKeys[key] = list[key];
+						});
+						return Object.keys(apiKeys);
+					})
+					.then(apiKeys => {
+						const promises = apiKeys.map(key => () =>
+							new Promise((resolve, reject) => {
+								client
+									.search({
+										index: "2019-*",
+										body: {
+											query: {
+												bool: {
+													must: [
+														{
+															match: {
+																api_key: key
+															}
+														},
+														{
+															range: {
+																date: {
+																	gte: new Date(
+																		new Date().getFullYear(),
+																		new Date().getMonth(),
+																		1
+																	)
+																}
+															}
+														}
+													]
+												}
+											},
+											size: 0
+										}
+									})
+									.then(response => {
+										responses.push(response);
+										resolve(response);
+									})
+									.catch(error => reject(error));
+							})
+						);
+						serial(promises)
+							.then(() => {
+								let total = 0;
+								responses.forEach(response => {
+									try {
+										total += response.hits.total;
+									} catch (e) {}
+								});
+								return total;
+							})
+							.then(total => {
+								pool.getConnection(function(err, connection) {
+									if (err) {
+										return res.status(500).json({ error: "connection_error" });
+									} else {
+										connection.query(
+											"UPDATE users SET pageviews_consumed=?, pageviews_updated=? WHERE id=?",
+											[total, Math.ceil(new Date().getTime() / 1000), id],
+											error => {
+												connection.release();
+												if (error) return res.status(500).json({ error: "database_error" });
+												res.json({ total });
+											}
+										);
+									}
+								});
+							})
+							.catch(error => {
+								console.log("Error", error);
+								res.status(500).json({ error: "error" });
+							});
+					})
+					.catch(error => {
 						res.status(500).json({ error: "error" });
 					});
 			},
