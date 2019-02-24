@@ -62,6 +62,15 @@ Oswald Labs Platform is a set of open, extensible APIs and SDKs to build apps. T
 | `GET /billing/subscriptions` | 🔒 Returns customer subscriptions |
 | `PUT /billing/subscriptions` | 🔒 Creates new subscription |
 
+### Agastya Analytics
+
+| Endpoint | Details
+| - | - |
+| `POST /agastya/analytics/recents` | 🔒 Returns recent tracked events |
+| `POST /agastya/analytics/graphs` | 🔒 Aggregated values for graphing |
+| `POST /agastya/analytics/sorted` | 🔒 Single key-value sorted events |
+| `POST /agastya/analytics/explore` | 🔒 User journey timeline |
+
 ## API limits
 
 These APIs are free for public usage with the following rate limits (requests slow down after 500 requests/15 minutes):

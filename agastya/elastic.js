@@ -204,3 +204,137 @@ module.exports.explore = (req, res) => {
 		res.json({ error: "no_token" });
 	}
 };
+
+module.exports.sorted = (req, res) => {
+	if (req.get("Authorization")) {
+		if (!req.body.apiKey && req.body.fingerprint && req.body.key && req.body.value)
+			return res.status(401).json({ error: "incomplete_fields" });
+		verifyToken(
+			req.get("Authorization"),
+			token => {
+				let id = 0;
+				try {
+					id = token.user.id;
+				} catch (e) {}
+				let apiKey = req.body.apiKey || "";
+				if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
+				delete req.body.owner;
+				const keyValuePair = {};
+				keyValuePair[req.body.key] = req.body.value;
+				database
+					.read(apiKey)
+					.then(contents => {
+						if (parseInt(contents.owner) === parseInt(id)) return contents;
+						throw new Error("not-owner");
+					})
+					.then(() =>
+						client.search({
+							index: "2019-*",
+							body: {
+								query: {
+									bool: {
+										must: [
+											{
+												match: {
+													api_key: apiKey
+												}
+											},
+											{
+												match: keyValuePair
+											},
+											{
+												range: {
+													date: {
+														gte: `now-${req.body.ago || "15m"}`
+													}
+												}
+											}
+										]
+									}
+								},
+								sort: [
+									{
+										date: { order: "desc" }
+									}
+								],
+								size: parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10
+							}
+						})
+					)
+					.then(response => res.json(response))
+					.catch(error => {
+						res.status(500).json({ error: "error" });
+					});
+			},
+			() => {
+				res.status(401);
+				res.json({ error: "invalid_token" });
+			}
+		);
+	} else {
+		res.status(422);
+		res.json({ error: "no_token" });
+	}
+};
+
+module.exports.graphs = (req, res) => {
+	if (req.get("Authorization")) {
+		if (!req.body.apiKey && req.body.key) return res.status(401).json({ error: "incomplete_fields" });
+		verifyToken(
+			req.get("Authorization"),
+			token => {
+				let id = 0;
+				try {
+					id = token.user.id;
+				} catch (e) {}
+				let apiKey = req.body.apiKey || "";
+				if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
+				delete req.body.owner;
+				database
+					.read(apiKey)
+					.then(contents => {
+						if (parseInt(contents.owner) === parseInt(id)) return contents;
+						throw new Error("not-owner");
+					})
+					.then(() =>
+						client.search({
+							index: "2019-*",
+							body: {
+								query: {
+									bool: {
+										must: [
+											{
+												match: {
+													api_key: apiKey
+												}
+											}
+										]
+									}
+								},
+								aggs: {
+									keywords: {
+										significant_text: {
+											field: req.body.key
+										}
+									}
+								},
+								size: parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10
+							}
+						})
+					)
+					.then(response => res.json(response))
+					.catch(error => {
+						console.log(error);
+						res.status(500).json({ error: "error" });
+					});
+			},
+			() => {
+				res.status(401);
+				res.json({ error: "invalid_token" });
+			}
+		);
+	} else {
+		res.status(422);
+		res.json({ error: "no_token" });
+	}
+};
