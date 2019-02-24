@@ -127,8 +127,8 @@ module.exports.forgot = (req, res) => {
 								{
 									to: req.body.email,
 									subject: "Password Reset / Agastya by Oswald Labs",
-									text: `Your code is ${resetCode}`,
-									html: `<p>Your code is <strong>${resetCode}</strong></p>`
+									text: `Click on the following link to reset your password: https://agastya.oswaldlabs.com/reset/${resetCode}`,
+									html: `<p>Click on the following link to reset your password: <strong>https://agastya.oswaldlabs.com/reset/${resetCode}</strong></p>`
 								},
 								(err, info) => {
 									if (err) {
@@ -208,8 +208,8 @@ module.exports.register = (req, res) => {
 														{
 															to: req.body.email,
 															subject: "Verify Email / Agastya by Oswald Labs",
-															text: `Your code is ${resetCode}`,
-															html: `<p>Your code is <strong>${resetCode}</strong></p>`
+															text: `Click on the following link to reset your password: https://agastya.oswaldlabs.com/reset/${resetCode}`,
+															html: `<p>Click on the following link to reset your password: <stronghttps://agastya.oswaldlabs.com/reset/>${resetCode}</strong></p>`
 														},
 														(err, info) => {
 															if (err) {
