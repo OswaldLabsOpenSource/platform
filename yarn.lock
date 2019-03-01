@@ -730,6 +730,11 @@ clone-response@1.0.2:
   dependencies:
     mimic-response "^1.0.0"
 
+clone@2.x:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
+  integrity sha1-G39Ln1kfHo+DZwQBYANFoCiHQ18=
+
 clone@^1.0.2:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
@@ -1564,11 +1569,12 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-fraud@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/fraud/-/fraud-4.1.0.tgz#b8f080c553f251ff6076ab3d3b1c74481deb0e2e"
-  integrity sha512-bAwvHAQLygotP/yyVRouB7uyMxEms3v/8O2RNYRkr9ymku6jYrqfS3Uzh09TrPRa8gh161jQRYxdyMWhY17FAw==
+fraud@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/fraud/-/fraud-5.0.0.tgz#9c8171bf5fb467f5c4f09b468a45011175a9a850"
+  integrity sha512-p2srtbmMLt+uLKPO13ZFmKgw7gRupPivJ6FbOgtHyBpBdny7LR441/weINUBYBnx8fk9Qkg0vBXYIIdoSo9bCw==
   dependencies:
+    node-cache "^4.2.0"
     promise-serial "^0.1.5"
 
 fresh@0.5.2:
@@ -3098,7 +3104,7 @@ lodash.sortby@^4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
 
-lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.4:
+lodash@4.x, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.4:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
 
@@ -3419,6 +3425,14 @@ negotiator@0.6.1:
 nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
+
+node-cache@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/node-cache/-/node-cache-4.2.0.tgz#48ac796a874e762582692004a376d26dfa875811"
+  integrity sha512-obRu6/f7S024ysheAjoYFEEBqqDWv4LOMNJEuO8vMeEw2AT4z+NCzO4hlc2lhI4vATzbCQv6kke9FVdx0RbCOw==
+  dependencies:
+    clone "2.x"
+    lodash "4.x"
 
 node-forge@^0.7.4:
   version "0.7.6"

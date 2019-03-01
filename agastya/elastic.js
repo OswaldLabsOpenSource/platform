@@ -99,6 +99,7 @@ module.exports.recents = (req, res) => {
 					.then(() =>
 						client.search({
 							index: "2019-*",
+							from: req.body.page * (parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10) || 0,
 							body: {
 								query: {
 									bool: {
@@ -106,13 +107,6 @@ module.exports.recents = (req, res) => {
 											{
 												match: {
 													api_key: apiKey
-												}
-											},
-											{
-												range: {
-													date: {
-														gte: `now-${req.body.ago || "15m"}`
-													}
 												}
 											}
 										]
