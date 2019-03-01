@@ -68,7 +68,7 @@ module.exports.delete = (req, res) => {
 			index: `${new Date().getUTCFullYear()}-*`,
 			body: {
 				query: { match: { ip: sanitize(md5(ip)) } },
-				script: { inline: "ctx._source.ip = 'retracted-as-per-gdpr-request'" }
+				script: { inline: "ctx._source.ip = 'redacted-as-per-gdpr-request'" }
 			}
 		},
 		(error, response) => {
