@@ -1,6 +1,7 @@
 # Oswald Labs Platform
 
-[![Uptime Robot ratio (30 days)](https://img.shields.io/uptimerobot/ratio/m781065098-7bb8bda769f96da5183584a5.svg)](https://status.oswaldlabs.com)
+[![Uptime Robot ratio (30 days)](https://img.shields.io/uptimerobot/ratio/m782086414-962c034e80dbd49655ca3a07.svg)](https://status.oswaldlabs.com)
+![Number of events](https://img.shields.io/endpoint.svg?color=brightgreen&url=https%3A%2F%2Fdeveloper.oswaldlabs.com%2Fshield)
 
 Oswald Labs Platform is a set of open, extensible APIs and SDKs to build apps. This repository contains (some) code that runs on our servers, primarily serving as a wrapper around various APIs and to prevent API key exposion. Most APIs available here are free for public use with rate limits.
 

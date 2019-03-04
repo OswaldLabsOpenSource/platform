@@ -1,6 +1,6 @@
 {
   "name": "platform",
-  "version": "2.0.27",
+  "version": "2.0.28",
   "main": "index.js",
   "repository": "https://github.com/AnandChowdhary/undrawcdn",
   "author": "Anand Chowdhary <anandchowdhary@gmail.com>",
