@@ -58,6 +58,7 @@ app.post("/agastya/analytics/explore", (req, res) => require("./agastya/elastic"
 app.post("/agastya/analytics/recents", (req, res) => require("./agastya/elastic").recents(req, res));
 app.post("/agastya/secure-collect", (req, res) => require("./agastya/track")(req, res));
 app.post("/agastya/secure-collect/:apiKey", (req, res) => require("./agastya/track")(req, res));
+app.post("/agastya/form/:apiKey", (req, res) => require("./agastya/form")(req, res));
 
 app.get("/auth/details", (req, res) => require("./agastya/auth").details(req, res));
 app.patch("/auth/details", (req, res) => require("./agastya/auth").update(req, res));
