@@ -99,7 +99,7 @@ module.exports.recents = (req, res) => {
 					.then(() =>
 						client.search({
 							index: "2019-*",
-							from: req.body.page * (parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10) || 0,
+							from: (req.body.page || 1) * (parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10) || 0,
 							body: {
 								query: {
 									bool: {
@@ -227,6 +227,7 @@ module.exports.sorted = (req, res) => {
 					.then(() =>
 						client.search({
 							index: "2019-*",
+							from: (req.body.page || 1) * (parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10) || 0,
 							body: {
 								query: {
 									bool: {
@@ -238,13 +239,6 @@ module.exports.sorted = (req, res) => {
 											},
 											{
 												match: keyValuePair
-											},
-											{
-												range: {
-													date: {
-														gte: `now-${req.body.ago || "15m"}`
-													}
-												}
 											}
 										]
 									}
