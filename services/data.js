@@ -6,5 +6,5 @@ module.exports.json = (req, res) => {
 };
 
 module.exports.shield = (req, res) => {
-	res.json({ schemaVersion: 1, label: "month", message: parseInt(data.eventsThisMonth || 0).toLocaleString() });
+	res.json({ schemaVersion: 1, label: new Date().toLocaleString('en-us', { month: 'long' }), message: parseInt(data.eventsThisMonth || 0).toLocaleString() });
 };
