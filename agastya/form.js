@@ -1,7 +1,7 @@
 const WhichBrowser = require("which-browser");
 const maxMind = require("maxmind");
 const geoLite2 = require("geolite2");
-const Fraud = require("Fraud");
+const Fraud = require("fraud");
 const pool = require("../database");
 const email = require("./email");
 
