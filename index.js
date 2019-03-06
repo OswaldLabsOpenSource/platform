@@ -42,6 +42,7 @@ app.get("/screenshot", (req, res) => require("./services/screenshot")(req, res))
 app.get("/reader", (req, res) => require("./services/reader")(req, res));
 app.post("/describe", (req, res) => require("./services/describe")(req, res));
 app.post("/reader", (req, res) => require("./services/reader")(req, res));
+app.get("/netlify-status/:key", (req, res) => require("./services/netlify-status")(req, res));
 
 app.get("/agastya/api-keys", (req, res) => require("./agastya/config").list(req, res));
 app.get("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").read(req, res));
