@@ -182,7 +182,7 @@ module.exports.explore = (req, res) => {
 										date: { order: "desc" }
 									}
 								],
-								size: parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10
+								size: 100
 							}
 						})
 					)
