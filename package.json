@@ -40,7 +40,7 @@
     "elasticsearch-sanitize": "^2.0.0",
     "express": "^4.16.4",
     "express-brute": "^1.0.1",
-    "express-form-data": "^2.0.6",
+    "express-form-data": "^2.0.8",
     "express-rate-limit": "^3.3.2",
     "express-slow-down": "^1.1.1",
     "form-data": "^2.3.3",

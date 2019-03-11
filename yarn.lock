@@ -1326,9 +1326,10 @@ express-brute@^1.0.1:
     long-timeout "~0.1.1"
     underscore "~1.8.3"
 
-express-form-data@^2.0.6:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/express-form-data/-/express-form-data-2.0.6.tgz#3c63169fb0ce3b604cb414f46f9ea64cd855dcae"
+express-form-data@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/express-form-data/-/express-form-data-2.0.8.tgz#a5d20923b4759da7320a693a53f39bc906a4c8a7"
+  integrity sha512-6vKlrsxlDMspGZQ6rjbNwwAe/W/nKXGs3ASx8mheGx9I39Z263NdYHXeuZTDoin0aBSxJ+m2HH2hPJKEa202gA==
   dependencies:
     connect-multiparty "^2.0.0"
     fs-extra "^5.0.0"
