@@ -39,6 +39,7 @@ app.get("/", (req, res) => {
 app.get("/data", (req, res) => require("./services/data").json(req, res));
 app.get("/shield", (req, res) => require("./services/data").shield(req, res));
 app.get("/screenshot", (req, res) => require("./services/screenshot")(req, res));
+app.get("/read-aloud", (req, res) => require("./services/read-aloud")(req, res));
 app.get("/reader", (req, res) => require("./services/reader")(req, res));
 app.post("/describe", (req, res) => require("./services/describe")(req, res));
 app.post("/reader", (req, res) => require("./services/reader")(req, res));

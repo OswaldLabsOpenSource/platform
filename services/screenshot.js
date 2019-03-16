@@ -13,18 +13,20 @@ module.exports = (req, res) => {
 	};
 	const imagePath = path.join(__dirname, "..", "cache", md5(url + JSON.stringify(options)) + ".png");
 
-	if (fs.existsSync(imagePath) && !req.query.refresh) {
-		res.sendFile(imagePath);
-	} else {
-		takeShot(options, imagePath)
-			.then(() => {
-				res.sendFile(imagePath);
-			})
-			.catch(e => {
-				console.log("Error!", e);
-				res.json(e);
-			});
-	}
+	fs.exists(imagePath, exists => {
+		if (exists && !req.query.refresh) {
+			res.sendFile(imagePath);
+		} else {
+			takeShot(options, imagePath)
+				.then(() => {
+					res.sendFile(imagePath);
+				})
+				.catch(e => {
+					console.log("Error!", e);
+					res.json(e);
+				});
+		}
+	});
 };
 
 const takeShot = async (options, path) => {
