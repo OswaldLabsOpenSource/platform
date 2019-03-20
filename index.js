@@ -5,9 +5,11 @@ const bodyParser = require("body-parser");
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
 const brute = require("express-brute");
+const Sentry = require("@sentry/node");
 const store = new brute.MemoryStore();
 const bruteforce = new brute(store);
 const crons = require("./crons");
+Sentry.init({ dsn: "https://958692a6eb8a409abbd72fd22298c03c@sentry.io/1254255" });
 
 const app = express();
 crons();
