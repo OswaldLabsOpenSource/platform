@@ -7,7 +7,7 @@ const sentry = require("../sentry");
 sentry();
 
 module.exports = (req, res) => {
-	const language = req.query.lang || "en-US-Wavenet-F";
+	const language = req.query.voice || "en-US-Wavenet-F";
 	const filePath = path.join(__dirname, "..", "cache", "read-aloud", md5(req.query.text + language) + ".mp3");
 	fs.exists(filePath, exists => {
 		if (!exists) {
