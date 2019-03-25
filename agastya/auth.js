@@ -10,6 +10,8 @@ const recaptcha = new reCaptcha({
 	siteKey: constants.recaptcha.site,
 	secretKey: constants.recaptcha.secret
 });
+const sentry = require("../sentry");
+sentry();
 
 module.exports.login = (req, res) => {
 	pool.getConnection(function(err, connection) {
@@ -178,7 +180,7 @@ module.exports.register = (req, res) => {
 							if (results.length === 0) {
 								const resetCode = crypto.randomBytes(20).toString("hex");
 								const apiKey = crypto.randomBytes(5).toString("hex");
-								stripe.customers.create(
+								stripe.init.customers.create(
 									{
 										email: req.body.email
 									},

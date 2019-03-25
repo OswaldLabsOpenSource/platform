@@ -5,6 +5,8 @@ const constants = require("../../constants");
 const pool = require("../../database");
 const fs = require("fs");
 const path = require("path");
+const sentry = require("../../sentry");
+sentry();
 
 const database = new Fraud.default({
 	directory: "./agastya-database",

@@ -4,6 +4,8 @@ const geoLite2 = require("geolite2");
 const Fraud = require("fraud");
 const pool = require("../database");
 const email = require("./email");
+const sentry = require("../sentry");
+sentry();
 
 const database = new Fraud.default({
 	directory: "./agastya-database",

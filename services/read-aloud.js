@@ -3,6 +3,8 @@ const md5 = require("md5");
 const fs = require("fs");
 const path = require("path");
 const constants = require("../constants");
+const sentry = require("../sentry");
+sentry();
 
 module.exports = (req, res) => {
 	const filePath = path.join(__dirname, "..", "cache", "read-aloud", md5(req.query.text) + ".mp3");

@@ -2,6 +2,8 @@ const puppeteer = require("puppeteer");
 const path = require("path");
 const md5 = require("md5");
 const fs = require("fs");
+const sentry = require("../sentry");
+sentry();
 
 module.exports = (req, res) => {
 	const url = req.query.url || "https://oswaldlabs.com";

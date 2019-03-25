@@ -7,6 +7,8 @@ const md5 = require("md5");
 const jsonExport = require("jsonexport");
 const constants = require("../constants");
 const Fraud = require("fraud");
+const sentry = require("../sentry");
+sentry();
 
 const database = new Fraud.default({
 	directory: "./agastya-database",

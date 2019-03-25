@@ -1,4 +1,6 @@
 const axios = require("axios");
+const sentry = require("../sentry");
+sentry();
 
 module.exports = (req, res) => {
 	const netlifyUrl = `https://api.netlify.com/api/v1/badges/${req.params.key}/deploy-status`;

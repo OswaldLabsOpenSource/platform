@@ -9,6 +9,8 @@ const Fraud = require("fraud");
 const package = require("../package.json");
 const AWS = require("aws-sdk");
 const constants = require("../constants");
+const sentry = require("../sentry");
+sentry();
 
 AWS.config.update({
 	credentials: new AWS.Credentials(constants.awsElasticSearch.access, constants.awsElasticSearch.secret),

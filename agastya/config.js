@@ -1,6 +1,8 @@
 const Fraud = require("fraud");
 const verifyToken = require("./token");
 const crypto = require("crypto");
+const sentry = require("../sentry");
+sentry();
 
 const database = new Fraud.default({
 	directory: "./agastya-database",

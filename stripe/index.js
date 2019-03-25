@@ -3,8 +3,10 @@ const stripe = require("stripe")(constants.stripe);
 const verifyToken = require("../agastya/token");
 const pool = require("../database");
 const jwt = require("jsonwebtoken");
+const sentry = require("../sentry");
+sentry();
 
-module.exports = stripe;
+module.exports.init = stripe;
 
 module.exports.cards = (req, res) => {
 	if (req.get("Authorization")) {

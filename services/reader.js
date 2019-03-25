@@ -1,5 +1,7 @@
 const axios = require("axios");
 const constants = require("../constants");
+const sentry = require("../sentry");
+sentry();
 
 module.exports = (req, res) =>
 	axios
