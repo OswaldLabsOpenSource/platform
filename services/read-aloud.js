@@ -7,7 +7,8 @@ const sentry = require("../sentry");
 sentry();
 
 module.exports = (req, res) => {
-	const filePath = path.join(__dirname, "..", "cache", "read-aloud", md5(req.query.text) + ".mp3");
+	const language = req.query.lang || "en-US-Wavenet-F";
+	const filePath = path.join(__dirname, "..", "cache", "read-aloud", md5(req.query.text + language) + ".mp3");
 	fs.exists(filePath, exists => {
 		if (!exists) {
 			axios({
@@ -18,8 +19,8 @@ module.exports = (req, res) => {
 						text: req.query.text
 					},
 					voice: {
-						languageCode: "en-US",
-						name: "en-US-Wavenet-F"
+						languageCode: language.substring(0, 5),
+						name: language
 					},
 					audioConfig: {
 						audioEncoding: "MP3",
