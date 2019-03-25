@@ -12,6 +12,7 @@ Oswald Labs Platform is a set of open, extensible APIs and SDKs to build apps. T
 | Endpoint | Details | Params |
 | - | - | - |
 | `GET /screenshot` | Screenshot image | `url` (webpage URL) |
+| `GET /read-aloud` | Text-to-speech | `text` (URL-encoded text) |
 | `GET /reader` | JSON with website content | `url` (webpage URL) |
 | `POST /reader` | JSON with website content | `url` (webpage URL) |
 | `POST /describe` | JSON with AutoALT | `dataUri` (base 64-encoded image) |
