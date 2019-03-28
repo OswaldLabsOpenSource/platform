@@ -2,6 +2,8 @@ const constants = require("../constants");
 const crypto = require("crypto");
 const pool = require("../database");
 const jwt = require("jsonwebtoken");
+const otplib = require("otplib");
+const qrcode = require("qrcode");
 const verifyToken = require("./token");
 const email = require("./email");
 const stripe = require("../stripe");
@@ -12,6 +14,39 @@ const recaptcha = new reCaptcha({
 });
 const sentry = require("../sentry");
 sentry();
+
+module.exports.enable2Fa = (req, res) => {
+	if (req.get("Authorization") && req.body) {
+		verifyToken(
+			req.get("Authorization"),
+			token => {
+				pool.getConnection((err, connection) => {
+					if (err) return res.status(500).json({ error: "connection_error" });
+
+					// Add 2fa_secret and 2fa_backup
+					const secretCode = crypto.randomBytes(20).toString("hex");
+					const backupCode = crypto.randomBytes(20).toString("hex");
+
+					connection.query(
+						"UPDATE users SET 2fa_secret = ?, 2fa_backup = ? WHERE id = ?",
+						[secretCode, backupCode, token.user.id],
+						(error, results) => {
+							if (error) return res.status(500).json({ error: "unable_to_update" });
+							const otpauth = otplib.authenticator.keyuri(token.user.id, "Oswald Labs", secretCode);
+							qrcode.toDataURL(otpauth, (err, imageUrl) => {
+								if (err) return res.status(500).json({ error: "qr_code_error" });
+								res.json({ imageUrl });
+							});
+						}
+					);
+				});
+			},
+			() => res.status(401).json({ error: "invalid_token" })
+		);
+	} else {
+		return res.status(422).json({ error: "no_token" });
+	}
+};
 
 module.exports.login = (req, res) => {
 	pool.getConnection(function(err, connection) {

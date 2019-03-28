@@ -67,6 +67,7 @@ app.post("/agastya/form/:apiKey", bruteforce.prevent, (req, res) => require("./a
 
 app.get("/auth/details", (req, res) => require("./agastya/auth").details(req, res));
 app.patch("/auth/details", (req, res) => require("./agastya/auth").update(req, res));
+app.get("/auth/2fa/enable", bruteforce.prevent, (req, res) => require("./agastya/auth").enable2Fa(req, res));
 app.post("/auth/login", bruteforce.prevent, (req, res) => require("./agastya/auth").login(req, res));
 app.post("/auth/register", bruteforce.prevent, (req, res) => require("./agastya/auth").register(req, res));
 app.post("/auth/forgot", bruteforce.prevent, (req, res) => require("./agastya/auth").forgot(req, res));
