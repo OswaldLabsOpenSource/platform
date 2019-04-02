@@ -2,7 +2,7 @@ const Fraud = require("fraud");
 const verifyToken = require("./token");
 const crypto = require("crypto");
 const sentry = require("../sentry");
-sentry();
+sentry.init();
 
 const database = new Fraud.default({
 	directory: "./agastya-database",
@@ -38,7 +38,10 @@ module.exports.list = (req, res) => {
 						return apiKeys;
 					})
 					.then(config => res.json(config))
-					.catch(() => res.status(500).json({ error: "error" }));
+					.catch(error => {
+						res.status(500).json({ error: "error" });
+						sentry.captureException(error);
+					});
 			},
 			() => {
 				res.status(401);
@@ -70,7 +73,10 @@ module.exports.create = (req, res) => {
 					})
 					.then(() => database.create(apiKey, { ...req.body, owner: id }))
 					.then(() => res.json({ created: apiKey }))
-					.catch(() => res.status(500).json({ error: "error" }));
+					.catch(error => {
+						res.status(500).json({ error: "error" });
+						sentry.captureException(error);
+					});
 			},
 			() => {
 				res.status(401);
@@ -108,7 +114,10 @@ module.exports.update = (req, res) => {
 					})
 					.then(() => database.update(apiKey, req.body))
 					.then(() => res.json({ updated: apiKey }))
-					.catch(() => res.status(500).json({ error: "error" }));
+					.catch(error => {
+						res.status(500).json({ error: "error" });
+						sentry.captureException(error);
+					});
 			},
 			() => {
 				res.status(401);
@@ -145,7 +154,10 @@ module.exports.delete = (req, res) => {
 					})
 					.then(() => database.delete(apiKey))
 					.then(() => res.json({ deleted: apiKey }))
-					.catch(error => { res.status(500).json({ error: "error" }); console.log("GoT", error); });
+					.catch(error => {
+						res.status(500).json({ error: "error" });
+						sentry.captureException(error);
+					});
 			},
 			() => {
 				res.status(401);

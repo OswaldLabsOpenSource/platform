@@ -13,7 +13,7 @@ const recaptcha = new reCaptcha({
 	secretKey: constants.recaptcha.secret
 });
 const sentry = require("../sentry");
-sentry();
+sentry.init();
 
 module.exports.enable2Fa = (req, res) => {
 	if (req.get("Authorization") && req.body) {
@@ -51,6 +51,7 @@ module.exports.enable2Fa = (req, res) => {
 module.exports.login = (req, res) => {
 	pool.getConnection(function(err, connection) {
 		if (err) {
+			sentry.captureException(err);
 			res.status(500);
 			res.json({ error: "connection_error" });
 		} else {
@@ -106,6 +107,7 @@ module.exports.login = (req, res) => {
 module.exports.details = (req, res) => {
 	pool.getConnection(function(err, connection) {
 		if (err) {
+			sentry.captureException(err);
 			res.status(500);
 			res.json({ error: "connection_error" });
 		} else {
@@ -143,6 +145,7 @@ module.exports.details = (req, res) => {
 module.exports.forgot = (req, res) => {
 	pool.getConnection(function(err, connection) {
 		if (err) {
+			sentry.captureException(err);
 			res.status(500);
 			res.json({ error: "connection_error" });
 		} else {
@@ -200,6 +203,7 @@ module.exports.forgot = (req, res) => {
 module.exports.register = (req, res) => {
 	pool.getConnection(function(err, connection) {
 		if (err) {
+			sentry.captureException(err);
 			res.status(500);
 			res.json({ error: "connection_error" });
 		} else {
@@ -290,6 +294,7 @@ module.exports.register = (req, res) => {
 module.exports.reset = (req, res) => {
 	pool.getConnection(function(err, connection) {
 		if (err) {
+			sentry.captureException(err);
 			res.status(500);
 			res.json({ error: "connection_error" });
 		} else {
@@ -368,6 +373,7 @@ module.exports.reset = (req, res) => {
 module.exports.update = (req, res) => {
 	pool.getConnection(function(err, connection) {
 		if (err) {
+			sentry.captureException(err);
 			res.status(500);
 			res.json({ error: "connection_error" });
 		} else {

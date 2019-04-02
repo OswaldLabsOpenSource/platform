@@ -4,7 +4,7 @@ const verifyToken = require("../agastya/token");
 const pool = require("../database");
 const jwt = require("jsonwebtoken");
 const sentry = require("../sentry");
-sentry();
+sentry.init();
 
 module.exports.init = stripe;
 

@@ -8,7 +8,7 @@ const jsonExport = require("jsonexport");
 const constants = require("../constants");
 const Fraud = require("fraud");
 const sentry = require("../sentry");
-sentry();
+sentry.init();
 
 const database = new Fraud.default({
 	directory: "./agastya-database",
@@ -101,7 +101,9 @@ module.exports.recents = (req, res) => {
 					.then(() =>
 						client.search({
 							index: "2019-*",
-							from: (req.body.page || 1) * (parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10) || 0,
+							from:
+								(req.body.page || 1) *
+									(parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10) || 0,
 							body: {
 								query: {
 									bool: {
@@ -126,6 +128,7 @@ module.exports.recents = (req, res) => {
 					.then(response => res.json(response))
 					.catch(error => {
 						res.status(500).json({ error: "error" });
+						sentry.captureException(error);
 					});
 			},
 			() => {
@@ -229,7 +232,9 @@ module.exports.sorted = (req, res) => {
 					.then(() =>
 						client.search({
 							index: "2019-*",
-							from: (req.body.page || 1) * (parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10) || 0,
+							from:
+								(req.body.page || 1) *
+									(parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10) || 0,
 							body: {
 								query: {
 									bool: {

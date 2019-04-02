@@ -5,7 +5,7 @@ const Fraud = require("fraud");
 const pool = require("../database");
 const email = require("./email");
 const sentry = require("../sentry");
-sentry();
+sentry.init();
 
 const database = new Fraud.default({
 	directory: "./agastya-database",

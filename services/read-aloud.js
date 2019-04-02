@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const constants = require("../constants");
 const sentry = require("../sentry");
-sentry();
+sentry.init();
 
 module.exports = (req, res) => {
 	const language = req.query.voice || "en-US-Wavenet-F";

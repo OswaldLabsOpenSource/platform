@@ -1,7 +1,7 @@
 const data = require("../data.json");
 const package = require("../package.json");
 const sentry = require("../sentry");
-sentry();
+sentry.init();
 
 module.exports.json = (req, res) => {
 	res.json({ ...data, version: package.version });

@@ -10,7 +10,7 @@ const package = require("../package.json");
 const AWS = require("aws-sdk");
 const constants = require("../constants");
 const sentry = require("../sentry");
-sentry();
+sentry.init();
 
 AWS.config.update({
 	credentials: new AWS.Credentials(constants.awsElasticSearch.access, constants.awsElasticSearch.secret),
@@ -60,8 +60,7 @@ const isEuCountry = data => {
 };
 
 module.exports = (req, res) => {
-
-    const api_key = (req.body.api_key || req.params.api_key);
+	const api_key = req.body.api_key || req.params.api_key;
 
 	if (!api_key) return res.status(401).json({ error: "no_api_key" });
 
@@ -193,7 +192,7 @@ module.exports = (req, res) => {
 				domains[i] = domains[i].trim();
 				if (domains[i] === "*" || domains[i] === domain || domains[i].endsWith(domain)) includes = true;
 			}
-		
+
 			if (api_key === "augmenta11y") includes = true;
 			if (!includes) return res.status(401).json({ error: "invalid_domain" });
 
@@ -215,8 +214,8 @@ module.exports = (req, res) => {
 						if (location[key]) data[key] = location[key];
 					});
 
-                    // Unique identifiers
-                    data.api_key = api_key;
+					// Unique identifiers
+					data.api_key = api_key;
 					data.session_id = data.session_id || randomString.generate();
 					data.ua_fp = md5(ip + data.browser_name + userAgent.toString());
 					data.combined_fp = md5(
@@ -255,9 +254,15 @@ module.exports = (req, res) => {
 								}
 							});
 						})
-						.catch(() => res.status(500).json({ error: "internal_error" }));
+						.catch(error => {
+							res.status(500).json({ error: "internal_error" });
+							sentry.captureException(error);
+						});
 				})
-				.catch(() => res.status(500).json({ error: "internal_error" }));
+				.catch(error => {
+					res.status(500).json({ error: "internal_error" });
+					sentry.captureException(error);
+				});
 		})
 		.catch(() => res.status(404).json({ error: "invalid_api_key" }));
 };

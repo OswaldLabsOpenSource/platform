@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 const constants = require("../constants");
 const marked = require("marked");
 const sentry = require("../sentry");
-sentry();
+sentry.init();
 
 const smtpConfig = {
 	service: "Zoho",

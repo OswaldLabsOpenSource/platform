@@ -3,7 +3,7 @@ const path = require("path");
 const md5 = require("md5");
 const fs = require("fs");
 const sentry = require("../sentry");
-sentry();
+sentry.init();
 
 module.exports = (req, res) => {
 	const url = req.query.url || "https://oswaldlabs.com";

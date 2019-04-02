@@ -1,7 +1,7 @@
 const constants = require("../constants");
 const jwt = require("jsonwebtoken");
 const sentry = require("../sentry");
-sentry();
+sentry.init();
 
 module.exports = (token, callback = () => {}, error = () => {}) => {
 	if (!token) {

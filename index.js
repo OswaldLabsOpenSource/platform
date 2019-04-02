@@ -11,7 +11,7 @@ const crons = require("./crons");
 const sentry = require("./sentry");
 
 const app = express();
-sentry();
+sentry.init();
 crons();
 
 app.use(bodyParser.json({ limit: "50mb" }));

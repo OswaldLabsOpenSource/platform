@@ -2,7 +2,7 @@ const constants = require("../constants");
 const formData = require("form-data");
 const microsoftComputerVision = require("microsoft-computer-vision");
 const sentry = require("../sentry");
-sentry();
+sentry.init();
 
 module.exports = (req, res) => {
 	const FormData = new formData();
