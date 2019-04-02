@@ -83,3 +83,23 @@ These APIs are free for public usage with the following rate limits (requests sl
 | GDPR export/delete    | Increasing delay      | Renews in 15 minutes |
 
 When you're using authenticated endpoints, use `/secure/*` instead of `/v1/*` to avoid all rate limits and send your API key as `x-api-key` in the header. API keys are available for free to [Oswald Labs Accelerator](https://oswaldlabs.com/accelerator) startups and our partners. Custom-priced API keys are available for everyone else; [get in touch](https://oswaldlabs.com/contact) to request one.
+
+## Development
+
+Clone this repo and install dependencies. To install Puppeteer on Ubuntu, first install [its dependencies](https://github.com/GoogleChrome/puppeteer/issues/3443#issuecomment-433096772). There may be [issues](https://techoverflow.net/2018/06/05/how-to-fix-puppetteer-error-while-loading-shared-libraries-libx11-xcb-so-1-cannot-open-shared-object-file-no-such-file-or-directory/).
+
+```
+yarn
+```
+
+Start a local server for development:
+
+```
+yarn start:local
+```
+
+Run the update shell script on production server:
+
+```bash
+./update.sh
+```
