@@ -90,7 +90,8 @@ module.exports.recents = (req, res) => {
 				try {
 					id = token.user.id;
 				} catch (e) {}
-				let apiKey = req.body.apiKey || "";
+				let apiKey = req.body.apiKey;
+				if (!apiKey) return res.json(422).json({ error: "no_api_key" });
 				if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
 				delete req.body.owner;
 				database
@@ -153,7 +154,8 @@ module.exports.explore = (req, res) => {
 				try {
 					id = token.user.id;
 				} catch (e) {}
-				let apiKey = req.body.apiKey || "";
+				let apiKey = req.body.apiKey;
+				if (!apiKey) return res.json(422).json({ error: "no_api_key" });
 				if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
 				delete req.body.owner;
 				database
@@ -219,7 +221,8 @@ module.exports.sorted = (req, res) => {
 				try {
 					id = token.user.id;
 				} catch (e) {}
-				let apiKey = req.body.apiKey || "";
+				let apiKey = req.body.apiKey;
+				if (!apiKey) return res.json(422).json({ error: "no_api_key" });
 				if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
 				delete req.body.owner;
 				const keyValuePair = {};
@@ -286,7 +289,8 @@ module.exports.graphs = (req, res) => {
 				try {
 					id = token.user.id;
 				} catch (e) {}
-				let apiKey = req.body.apiKey || "";
+				let apiKey = req.body.apiKey;
+				if (!apiKey) return res.json(422).json({ error: "no_api_key" });
 				if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
 				delete req.body.owner;
 				database
