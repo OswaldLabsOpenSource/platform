@@ -10,6 +10,7 @@ const Fraud = require("fraud");
 const sentry = require("../sentry");
 sentry.init();
 
+const index = `${new Date().getUTCFullYear()}-*`;
 const database = new Fraud.default({
 	directory: "./agastya-database",
 	softDelete: true
@@ -100,7 +101,7 @@ module.exports.recents = (req, res) => {
 					})
 					.then(() =>
 						client.search({
-							index: "2019-*",
+							index,
 							from:
 								(req.body.page || 1) *
 									(parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10) || 0,
@@ -163,7 +164,7 @@ module.exports.explore = (req, res) => {
 					})
 					.then(() =>
 						client.search({
-							index: "2019-*",
+							index,
 							body: {
 								size: 100,
 								query: {
@@ -231,7 +232,7 @@ module.exports.sorted = (req, res) => {
 					})
 					.then(() =>
 						client.search({
-							index: "2019-*",
+							index,
 							from:
 								(req.body.page || 1) *
 									(parseInt(req.body.size || 10) < 100 ? parseInt(req.body.size || 10) : 10) || 0,
@@ -296,7 +297,7 @@ module.exports.graphs = (req, res) => {
 					})
 					.then(() =>
 						client.search({
-							index: "2019-*",
+							index,
 							body: {
 								query: {
 									bool: {
@@ -363,7 +364,7 @@ module.exports.quota = (req, res) => {
 							new Promise((resolve, reject) => {
 								client
 									.search({
-										index: "2019-*",
+										index,
 										body: {
 											query: {
 												bool: {
