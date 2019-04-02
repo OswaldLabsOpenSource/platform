@@ -130,6 +130,55 @@ module.exports.update = (req, res) => {
 	}
 };
 
+module.exports.rename = (req, res) => {
+	if (req.get("Authorization")) {
+		verifyToken(
+			req.get("Authorization"),
+			token => {
+				let id = 0;
+				try {
+					id = token.user.id;
+				} catch (e) {}
+				let error = "error";
+				let apiKey = req.params.apiKey || "";
+				if (apiKey.includes(".json")) apiKey = apiKey.replace(".json", "");
+				database
+					.exists(apiKey)
+					.then(exists => {
+						if (exists) return apiKey;
+						error = "does-not-exist";
+						throw new Error("does-not-exist");
+					})
+					.then(() => database.read(apiKey))
+					.then(contents => {
+						if (parseInt(contents.owner) === parseInt(id)) return contents;
+						error = "not-owner";
+						throw new Error("not-owner");
+					})
+					.exists(req.body.to)
+					.then(exists => {
+						if (!exists) return req.body.to;
+						error = "already-exists";
+						throw new Error("already-exists");
+					})
+					.then(() => database.rename(apiKey, req.body.to))
+					.then(() => res.json({ from: apiKey, to: req.body.to }))
+					.catch(err => {
+						res.status(400).json({ error });
+						if (error === "error") sentry.captureException(err);
+					});
+			},
+			() => {
+				res.status(401);
+				res.json({ error: "invalid_token" });
+			}
+		);
+	} else {
+		res.status(422);
+		res.json({ error: "no_token" });
+	}
+};
+
 module.exports.delete = (req, res) => {
 	if (req.get("Authorization")) {
 		verifyToken(

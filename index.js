@@ -50,6 +50,7 @@ app.get("/netlify-status/:key", (req, res) => require("./services/netlify-status
 app.get("/agastya/api-keys", (req, res) => require("./agastya/config").list(req, res));
 app.get("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").read(req, res));
 app.patch("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").update(req, res));
+app.post("/agastya/api-keys/:apiKey/rename", (req, res) => require("./agastya/config").rename(req, res));
 app.delete("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").delete(req, res));
 app.put("/agastya/api-keys", (req, res) => require("./agastya/config").create(req, res));
 
