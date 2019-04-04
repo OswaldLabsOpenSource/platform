@@ -1,4 +1,5 @@
 module.exports = {
+	environment: "development",
 	secret: "jwt-secret-key",
 	salt: "salt-for-hashing",
 	encryptionKey: "encryption-key",
