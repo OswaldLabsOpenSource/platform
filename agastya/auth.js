@@ -24,8 +24,8 @@ module.exports.enable2Fa = (req, res) => {
 					if (err) return res.status(500).json({ error: "connection_error" });
 
 					// Add 2fa_secret and 2fa_backup
-					const secretCode = crypto.randomBytes(20).toString("hex");
-					const backupCode = crypto.randomBytes(20).toString("hex");
+					const secretCode = otplib.authenticator.generateSecret();
+					const backupCode = otplib.authenticator.generateSecret();
 
 					connection.query(
 						"UPDATE users SET 2fa_secret = ?, 2fa_backup = ? WHERE id = ?",
@@ -38,6 +38,36 @@ module.exports.enable2Fa = (req, res) => {
 								res.json({ imageUrl });
 							});
 						}
+					);
+				});
+			},
+			() => res.status(401).json({ error: "invalid_token" })
+		);
+	} else {
+		return res.status(422).json({ error: "no_token" });
+	}
+};
+
+module.exports.verifyOTP = (req, res) => {
+	if (req.get("Authorization") && req.body) {
+		verifyToken(
+			req.get("Authorization"),
+			token => {
+				pool.getConnection((err, connection) => {
+					if (err) return res.status(500).json({ error: "connection_error" });
+
+					connection.query(
+						"SELECT 2fa_secret FROM users WHERE id = ?",
+						[token.user.id],
+						(error, results) => {
+							if (error) return res.status(500).json({ error: "unable_to_update" });
+							if (req.body.otp_code) {
+								var isValid = otplib.authenticator.check(req.body.otp_code, results[0]["2fa_secret"]);
+								res.json({ verified: isValid });
+							} else {
+								return res.status(422).json({ error: "invalid_otp" });
+							}
+						}	
 					);
 				});
 			},
