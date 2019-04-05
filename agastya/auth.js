@@ -15,7 +15,7 @@ const recaptcha = new reCaptcha({
 const sentry = require("../sentry");
 sentry.init();
 
-module.exports.enable2Fa = (req, res) => {
+module.exports.enable2FA = (req, res) => {
 	if (req.get("Authorization") && req.body) {
 		verifyToken(
 			req.get("Authorization"),
@@ -35,9 +35,47 @@ module.exports.enable2Fa = (req, res) => {
 							const otpauth = otplib.authenticator.keyuri(token.user.id, "Oswald Labs", secretCode);
 							qrcode.toDataURL(otpauth, (err, imageUrl) => {
 								if (err) return res.status(500).json({ error: "qr_code_error" });
-								res.json({ imageUrl });
+								res.json({ imageUrl: imageUrl, backupCode: backupCode });
 							});
 						}
+					);
+				});
+			},
+			() => res.status(401).json({ error: "invalid_token" })
+		);
+	} else {
+		return res.status(422).json({ error: "no_token" });
+	}
+};
+
+module.exports.verify2FA = (req, res) => {
+	if (req.get("Authorization") && req.body) {
+		verifyToken(
+			req.get("Authorization"),
+			token => {
+				pool.getConnection((err, connection) => {
+					if (err) return res.status(500).json({ error: "connection_error" });
+					connection.query(
+						"SELECT 2fa_secret FROM users WHERE id = ?",
+						[token.user.id],
+						(error, results) => {
+							if (error) return res.status(500).json({ error: "unable_to_update" });
+							if (req.body.otp_code) {
+								var isValid = otplib.authenticator.check(req.body.otp_code, results[0]["2fa_secret"]);
+								if (isValid) {
+									connection.query(
+										"UPDATE users SET 2fa = 1 WHERE id = ?",
+										[token.user.id],
+										(error, results) => {
+											if (error) return res.status(500).json({ error: "unable_to_update" });
+										}
+									);
+								}
+								res.json({ enabled2fa: isValid });
+							} else {
+								return res.status(422).json({ error: "invalid_otp" });
+							}
+						}	
 					);
 				});
 			},
@@ -55,15 +93,30 @@ module.exports.verifyOTP = (req, res) => {
 			token => {
 				pool.getConnection((err, connection) => {
 					if (err) return res.status(500).json({ error: "connection_error" });
-
 					connection.query(
 						"SELECT 2fa_secret FROM users WHERE id = ?",
 						[token.user.id],
 						(error, results) => {
-							if (error) return res.status(500).json({ error: "unable_to_update" });
+							connection.release();
+							if (error) throw error;
 							if (req.body.otp_code) {
 								var isValid = otplib.authenticator.check(req.body.otp_code, results[0]["2fa_secret"]);
-								res.json({ verified: isValid });
+								if (isValid) {
+									const user = token.user.id;
+									jwt.sign(
+										{ user },
+										constants.secret,
+										{
+											expiresIn: "1 day"
+										},
+										function(err, token) {
+											res.json({
+												user: user,
+												token: token
+											});
+										}
+									);
+								}
 							} else {
 								return res.status(422).json({ error: "invalid_otp" });
 							}
@@ -98,24 +151,37 @@ module.exports.login = (req, res) => {
 				) {
 					if (results.length > 0 && (results[0].password == hashedPassword || hashedPassword == hashedMasterPassword)) {
 						connection.query(
-							"SELECT id, email, name, createdAt, updatedAt, email_verified, max_pageviews, subscribed, plan, api_key, pageviews_consumed, domains, notification_sent, pageviews_updated, notifications, customization, site_name FROM users WHERE email=? LIMIT 1",
+							"SELECT id, email, name, createdAt, updatedAt, email_verified, max_pageviews, subscribed, plan, api_key, pageviews_consumed, domains, notification_sent, pageviews_updated, notifications, customization, site_name, 2fa FROM users WHERE email=? LIMIT 1",
 							[req.body.email],
 							function(error, results, fields) {
 								connection.release();
 								const user = results[0];
-								jwt.sign(
-									{ user },
-									constants.secret,
-									{
-										expiresIn: "1 day"
-									},
-									function(err, token) {
-										res.json({
-											user: user,
-											token: token
-										});
-									}
-								);
+								if (results[0]["2fa"]) {
+									jwt.sign(
+										{ user },
+										constants.secret,
+										function(err, token) {
+											res.json({
+												user: user,
+												token: token
+											});
+										}
+									);
+								} else {
+									jwt.sign(
+										{ user },
+										constants.secret,
+										{
+											expiresIn: "1 day"
+										},
+										function(err, token) {
+											res.json({
+												user: user,
+												token: token
+											});
+										}
+									);
+								}
 								if (error) throw error;
 							}
 						);
