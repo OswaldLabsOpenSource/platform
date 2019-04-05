@@ -97,16 +97,17 @@ module.exports.verifyOTP = (req, res) => {
 								var isValid = otplib.authenticator.check(req.body.otp_code, results[0]["2fa_secret"]);
 								if (isValid) {
 									const user = results[0];
+									delete user["2fa_secret"];
 									jwt.sign(
 										{ user },
 										constants.secret,
 										{
 											expiresIn: "1 day"
 										},
-										function(err, token_2fa) {
+										function(err, token) {
 											res.json({
 												user: user,
-												token: token_2fa
+												token: token
 											});
 										}
 									);
@@ -161,7 +162,7 @@ module.exports.login = (req, res) => {
 										},
 										function(err, token) {
 											res.json({
-												token: token
+												token_2fa: token
 											});
 										}
 									);
