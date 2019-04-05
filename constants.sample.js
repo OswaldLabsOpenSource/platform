@@ -9,6 +9,7 @@ module.exports = {
 	mercury: "mercury-api-key",
 	elastic: "elastic-search-endpoint.com",
 	google: "google-cloud-api-key",
+	ipinfo: "ipinfo-access-token",
 	mysql: {
 		host: "mysql-host",
 		port: "mysql-port",
