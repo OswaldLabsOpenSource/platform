@@ -35,7 +35,7 @@ module.exports.enable2FA = (req, res) => {
 							const otpauth = otplib.authenticator.keyuri(token.user.id, "Oswald Labs", secretCode);
 							qrcode.toDataURL(otpauth, (err, imageUrl) => {
 								if (err) return res.status(500).json({ error: "qr_code_error" });
-								res.json({ imageUrl: imageUrl, backupCode: backupCode });
+								res.json({ imageUrl, backupCode });
 							});
 						}
 					);
@@ -55,28 +55,22 @@ module.exports.verify2FA = (req, res) => {
 			token => {
 				pool.getConnection((err, connection) => {
 					if (err) return res.status(500).json({ error: "connection_error" });
-					connection.query(
-						"SELECT 2fa_secret FROM users WHERE id = ?",
-						[token.user.id],
-						(error, results) => {
-							if (error) return res.status(500).json({ error: "unable_to_update" });
-							if (req.body.otp_code) {
-								var isValid = otplib.authenticator.check(req.body.otp_code, results[0]["2fa_secret"]);
-								if (isValid) {
-									connection.query(
-										"UPDATE users SET 2fa = 1 WHERE id = ?",
-										[token.user.id],
-										(error, results) => {
-											if (error) return res.status(500).json({ error: "unable_to_update" });
-										}
-									);
-								}
-								res.json({ enabled2fa: isValid });
+					connection.query("SELECT 2fa_secret FROM users WHERE id = ?", [token.user.id], (error, results) => {
+						if (error) return res.status(500).json({ error: "unable_to_update" });
+						if (req.body.otp_code) {
+							var isValid = otplib.authenticator.check(req.body.otp_code, results[0]["2fa_secret"]);
+							if (isValid) {
+								connection.query("UPDATE users SET 2fa = 1 WHERE id = ?", [token.user.id], (error, results) => {
+									if (error) return res.status(500).json({ error: "unable_to_update" });
+									return res.sendStatus(200);
+								});
 							} else {
-								return res.status(422).json({ error: "invalid_otp" });
+								return res.status(401).json({ error: "invalid_otp" });
 							}
-						}	
-					);
+						} else {
+							return res.status(422).json({ error: "no_otp" });
+						}
+					});
 				});
 			},
 			() => res.status(401).json({ error: "invalid_token" })
@@ -94,7 +88,7 @@ module.exports.verifyOTP = (req, res) => {
 				pool.getConnection((err, connection) => {
 					if (err) return res.status(500).json({ error: "connection_error" });
 					connection.query(
-						"SELECT 2fa_secret FROM users WHERE id = ?",
+						"SELECT id, email, name, createdAt, updatedAt, email_verified, max_pageviews, subscribed, plan, api_key, pageviews_consumed, domains, notification_sent, pageviews_updated, notifications, customization, site_name, 2fa, 2fa_secret FROM users WHERE id= ? LIMIT 1",
 						[token.user.id],
 						(error, results) => {
 							connection.release();
@@ -102,25 +96,27 @@ module.exports.verifyOTP = (req, res) => {
 							if (req.body.otp_code) {
 								var isValid = otplib.authenticator.check(req.body.otp_code, results[0]["2fa_secret"]);
 								if (isValid) {
-									const user = token.user.id;
+									const user = results[0];
 									jwt.sign(
 										{ user },
 										constants.secret,
 										{
 											expiresIn: "1 day"
 										},
-										function(err, token) {
+										function(err, token_2fa) {
 											res.json({
 												user: user,
-												token: token
+												token: token_2fa
 											});
 										}
 									);
+								} else {
+									return res.status(401).json({ error: "invalid_otp" });
 								}
 							} else {
-								return res.status(422).json({ error: "invalid_otp" });
+								return res.status(422).json({ error: "no_otp" });
 							}
-						}	
+						}
 					);
 				});
 			},
@@ -160,9 +156,11 @@ module.exports.login = (req, res) => {
 									jwt.sign(
 										{ user },
 										constants.secret,
+										{
+											expiresIn: "10 minutes"
+										},
 										function(err, token) {
 											res.json({
-												user: user,
 												token: token
 											});
 										}
