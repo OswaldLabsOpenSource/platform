@@ -6,7 +6,6 @@ module.exports = {
 	stripe: "stripe-live-api-key",
 	master: "hashed-master",
 	azure: "azure-api-key",
-	mercury: "mercury-api-key",
 	elastic: "elastic-search-endpoint.com",
 	google: "google-cloud-api-key",
 	ipinfo: "ipinfo-access-token",

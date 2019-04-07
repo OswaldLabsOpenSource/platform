@@ -1,6 +1,6 @@
 {
   "name": "platform",
-  "version": "2.0.52",
+  "version": "2.0.53",
   "main": "index.js",
   "repository": "https://github.com/AnandChowdhary/undrawcdn",
   "author": "Anand Chowdhary <anandchowdhary@gmail.com>",
@@ -27,6 +27,7 @@
     }
   },
   "dependencies": {
+    "@postlight/mercury-parser": "^2.0.0",
     "@sentry/node": "^4.6.4",
     "atob": "^2.1.2",
     "aws-sdk": "^2.408.0",
