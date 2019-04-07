@@ -95,7 +95,25 @@ module.exports = (req, res) => {
 						location.region_name = ipLookup.subdivisions[0].names.en;
 						location.region_code = ipLookup.subdivisions[0].iso_code;
 					} catch (e) {}
-					resolve(location);
+					if (location.country_code) return resolve(location);
+
+					axios({
+						method: "get",
+						url: `https://ipinfo.io/${ip}/?token=${constants.ipinfo}`,
+						headers: { Accept: "application/json" }
+					})
+						.then(info => {
+							if (info.city) data.city = info.city;
+							if (info.country) data.country_code = info.country;
+							if (info.loc) data.latitude = parseInt(info.loc.split(",")[0]);
+							if (info.loc) data.longitude = parseInt(info.loc.split(",")[1]);
+							if (info.postal) data.zip_code = info.postal;
+							if (info.region) data.region_name = info.region;
+							if (info.org) data.org = info.org;
+							if (info.hostname) data.hostname = info.hostname;
+						})
+						.catch(() => {})
+						.then(() => resolve(location));
 				});
 			}
 		});
