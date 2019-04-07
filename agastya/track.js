@@ -9,6 +9,7 @@ const Fraud = require("fraud");
 const package = require("../package.json");
 const AWS = require("aws-sdk");
 const constants = require("../constants");
+const { getName } = require("country-list");
 const sentry = require("../sentry");
 sentry.init();
 
@@ -28,35 +29,35 @@ const database = new Fraud.default({
 
 const isEuCountry = data => {
 	return [
-		"Austria",
-		"Italy",
-		"Belgium",
-		"Latvia",
-		"Bulgaria",
-		"Lithuania",
-		"Croatia",
-		"Luxembourg",
-		"Cyprus",
-		"Malta",
-		"Czechia",
-		"Netherlands",
-		"Denmark",
-		"Poland",
-		"Estonia",
-		"Portugal",
-		"Finland",
-		"Romania",
-		"France",
-		"Slovakia",
-		"Germany",
-		"Slovenia",
-		"Greece",
-		"Spain",
-		"Hungary",
-		"Sweden",
-		"Ireland",
-		"United Kingdom"
-	].includes(data.country_name);
+		"AT",
+		"IT",
+		"BE",
+		"LV",
+		"BG",
+		"LT",
+		"HR",
+		"LU",
+		"CY",
+		"MT",
+		"CZ",
+		"NL",
+		"DK",
+		"PL",
+		"EE",
+		"PT",
+		"FI",
+		"RO",
+		"FR",
+		"SK",
+		"DE",
+		"SI",
+		"GR",
+		"ES",
+		"HU",
+		"SE",
+		"IE",
+		"GB"
+	].includes(data.country_code);
 };
 
 module.exports = (req, res) => {
@@ -76,7 +77,7 @@ module.exports = (req, res) => {
 	const getLocation = data =>
 		new Promise(resolve => {
 			const location = {};
-			if (data.country_name && data.country_code && data.city) {
+			if (data.country_code && data.city) {
 				data.geolocationCache = true;
 				resolve(location);
 			} else {
@@ -85,7 +86,6 @@ module.exports = (req, res) => {
 						const ipLookup = cityLookup.get(ip);
 						location.city = ipLookup.city.names.en;
 						location.continent = ipLookup.continent.names.en;
-						location.country_name = ipLookup.country.names.en;
 						location.country_code = ipLookup.country.iso_code;
 						location.latitude = ipLookup.location.latitude;
 						location.longitude = ipLookup.location.longitude;
@@ -96,7 +96,7 @@ module.exports = (req, res) => {
 						location.region_code = ipLookup.subdivisions[0].iso_code;
 						data.location_source = "maxmind";
 					} catch (e) {}
-					if (location.country_code) return resolve(location);
+					if (location.country_code && location.city) return resolve(location);
 
 					axios({
 						method: "get",
@@ -167,24 +167,15 @@ module.exports = (req, res) => {
 	// User agent
 	let userAgent = {};
 	data.user_agent_string = data.user_agent_string || req.headers["user-agent"];
-	try {
-		userAgent = new WhichBrowser(data.user_agent_string);
-		if (data.browser_name && data.browser_version && data.os_name && data.os_version) {
-			userAgentCache = true;
-		} else {
+	if (data.browser_name && data.browser_version && data.os_name && data.os_version) {
+		userAgentCache = true;
+	} else {
+		try {
+			userAgent = new WhichBrowser(data.user_agent_string);
 			data.browser_name = userAgent.browser.name;
-			data.browser_version = parseInt(
-				userAgent.browser && typeof userAgent.browser.toString === "function"
-					? userAgent.browser
-							.toString()
-							.replace(data.browser_name, "")
-							.replace(/ /g, "")
-					: null
-			);
 			data.browser_subversion = userAgent.browser.version.value;
 			data.browser_stock = userAgent.browser.stock;
 			data.os_name = userAgent.os.name;
-			data.os_version = parseInt(userAgent.os.version.value.split(".")[0]);
 			data.os_subversion = userAgent.os.version.value;
 			data.os_build = userAgent.os.build;
 			data.browser_engine = userAgent.engine.name;
@@ -193,10 +184,23 @@ module.exports = (req, res) => {
 			data.device_type = userAgent.device.type;
 			data.device_subtype = userAgent.device.subtype;
 			data.device_identifier = userAgent.device.identifier;
+		} catch (e) {}
+		// Keeping error-prone values in a separate try/catch 
+		try {
+			userAgent = new WhichBrowser(data.user_agent_string);
+			data.browser_version = parseInt(
+				userAgent.browser && typeof userAgent.browser.toString === "function"
+					? userAgent.browser
+							.toString()
+							.replace(data.browser_name, "")
+							.replace(/ /g, "")
+					: null
+			);
+			data.os_version = parseInt(userAgent.os.version.value.split(".")[0]);
 			if (!data.browser_version && data.browser_subversion) data.browser_version = parseInt(data.browser_subversion);
 			if (!data.os_version && data.os_subversion) data.os_version = parseInt(data.os_subversion);
-		}
-	} catch (e) {}
+		} catch (e) {}
+	}
 
 	// Validate API key
 	database
@@ -221,7 +225,6 @@ module.exports = (req, res) => {
 					[
 						"city",
 						"continent",
-						"country_name",
 						"country_code",
 						"latitude",
 						"longitude",
@@ -262,6 +265,10 @@ module.exports = (req, res) => {
 							body: data
 						})
 						.then(result => {
+							// Don't save the country name is the database
+							// But send it as the response
+							if (data.country_code && !getName(countryNames[data.country_code]))
+								data.country_name = getName(countryNames[data.country_code]);
 							res.json({
 								status: "success",
 								response: data,

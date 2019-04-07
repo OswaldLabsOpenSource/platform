@@ -967,6 +967,11 @@ cosmiconfig@^5.0.7:
     lodash.get "^4.4.2"
     parse-json "^4.0.0"
 
+country-list@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/country-list/-/country-list-2.1.0.tgz#0c0c26183e30743a620e5a01edd905a1777b0094"
+  integrity sha512-RHyEQyui0SHKFFtK342rN1YE9vNRH6ZYgm8aG3rUUHQW6BmcFCkQln0YUILPyBtdBxocxYAfElm4nXk3KOG8vg==
+
 create-error-class@^3.0.0:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/create-error-class/-/create-error-class-3.0.2.tgz#06be7abef947a3f14a30fd610671d401bca8b7b6"
