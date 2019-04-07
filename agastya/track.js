@@ -268,8 +268,8 @@ module.exports = (req, res) => {
 						.then(result => {
 							// Don't save the country name is the database
 							// But send it as the response
-							if (data.country_code && !getName(countryNames[data.country_code]))
-								data.country_name = getName(countryNames[data.country_code]);
+							if (data.country_code && !getName(data.country_code))
+								data.country_name = getName(data.country_code);
 							res.json({
 								status: "success",
 								response: data,
@@ -283,6 +283,7 @@ module.exports = (req, res) => {
 							});
 						})
 						.catch(error => {
+							console.log("error", error);
 							res.status(500).json({ error: "internal_error" });
 							sentry.captureException(error);
 						});
