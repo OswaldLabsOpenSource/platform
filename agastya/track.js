@@ -94,6 +94,7 @@ module.exports = (req, res) => {
 						location.zip_code = ipLookup.postal.code;
 						location.region_name = ipLookup.subdivisions[0].names.en;
 						location.region_code = ipLookup.subdivisions[0].iso_code;
+						data.location_source = "maxmind";
 					} catch (e) {}
 					if (location.country_code) return resolve(location);
 
@@ -111,6 +112,7 @@ module.exports = (req, res) => {
 							if (info.region) data.region_name = info.region;
 							if (info.org) data.org = info.org;
 							if (info.hostname) data.hostname = info.hostname;
+							data.location_source = "ipinfo";
 						})
 						.catch(() => {})
 						.then(() => resolve(location));
