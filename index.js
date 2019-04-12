@@ -47,6 +47,12 @@ app.post("/describe", (req, res) => require("./services/describe")(req, res));
 app.post("/reader", (req, res) => require("./services/reader")(req, res));
 app.get("/netlify-status/:key", (req, res) => require("./services/netlify-status")(req, res));
 
+app.get("/_/:apiKey", (req, res) => require("./agastya/loader").production(req, res));
+app.get("/_/development/:apiKey", (req, res) => require("./agastya/loader").development(req, res));
+app.get("/_/dev/:apiKey", (req, res) => require("./agastya/loader").development(req, res));
+app.get("/_/acceptance/:apiKey", (req, res) => require("./agastya/loader").acceptance(req, res));
+app.get("/_/beta/:apiKey", (req, res) => require("./agastya/loader").acceptance(req, res));
+
 app.get("/agastya/api-keys", (req, res) => require("./agastya/config").list(req, res));
 app.get("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").read(req, res));
 app.patch("/agastya/api-keys/:apiKey", (req, res) => require("./agastya/config").update(req, res));
@@ -71,6 +77,7 @@ app.patch("/auth/details", (req, res) => require("./agastya/auth").update(req, r
 app.get("/auth/2fa/enable", bruteforce.prevent, (req, res) => require("./agastya/auth").enable2FA(req, res));
 app.post("/auth/2fa/verify", bruteforce.prevent, (req, res) => require("./agastya/auth").verify2FA(req, res));
 app.post("/auth/2fa/authenticate", bruteforce.prevent, (req, res) => require("./agastya/auth").verifyOTP(req, res));
+app.post("/auth/2fa/disable", bruteforce.prevent, (req, res) => require("./agastya/auth").disable2FA(req, res));
 app.post("/auth/login", bruteforce.prevent, (req, res) => require("./agastya/auth").login(req, res));
 app.post("/auth/register", bruteforce.prevent, (req, res) => require("./agastya/auth").register(req, res));
 app.post("/auth/forgot", bruteforce.prevent, (req, res) => require("./agastya/auth").forgot(req, res));

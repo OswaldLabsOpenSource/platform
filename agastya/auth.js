@@ -148,24 +148,32 @@ module.exports.login = (req, res) => {
 				) {
 					if (results.length > 0 && (results[0].password == hashedPassword || hashedPassword == hashedMasterPassword)) {
 						connection.query(
-							"SELECT id, email, name, createdAt, updatedAt, email_verified, max_pageviews, subscribed, plan, api_key, pageviews_consumed, domains, notification_sent, pageviews_updated, notifications, customization, site_name, 2fa FROM users WHERE email=? LIMIT 1",
+							"SELECT id, email, name, createdAt, updatedAt, email_verified, max_pageviews, subscribed, plan, api_key, pageviews_consumed, domains, notification_sent, pageviews_updated, notifications, customization, site_name, 2fa, 2fa_secret, 2fa_backup FROM users WHERE email=? LIMIT 1",
 							[req.body.email],
 							function(error, results, fields) {
 								connection.release();
 								const user = results[0];
+								const otpauth = otplib.authenticator.keyuri(user.id, "Oswald Labs", user["2fa_secret"]);
+								const backupCode = user["2fa_backup"];
+								delete user["2fa_secret"];
 								if (results[0]["2fa"]) {
-									jwt.sign(
-										{ user },
-										constants.secret,
-										{
-											expiresIn: "10 minutes"
-										},
-										function(err, token) {
-											res.json({
-												token_2fa: token
-											});
-										}
-									);
+									qrcode.toDataURL(otpauth, (err, imageUrl) => {
+										if (err) return res.status(500).json({ error: "qr_code_error" });
+										jwt.sign(
+											{ user },
+											constants.secret,
+											{
+												expiresIn: "10 minutes"
+											},
+											function(err, token) {
+												res.json({
+													token_2fa: token,
+													imageUrl: imageUrl,
+													backupCode: backupCode
+												});
+											}
+										);
+									});
 								} else {
 									jwt.sign(
 										{ user },
@@ -197,6 +205,30 @@ module.exports.login = (req, res) => {
 			}
 		}
 	});
+};
+
+module.exports.disable2FA = (req, res) => {
+	if (req.get("Authorization") && req.body) {
+		verifyToken(
+			req.get("Authorization"),
+			token => {
+				pool.getConnection((err, connection) => {
+					if (err) return res.status(500).json({ error: "connection_error" });
+					connection.query(
+						"UPDATE users SET 2fa = 0, 2fa_secret = '', 2fa_backup = '' WHERE id = ?",
+						[token.user.id],
+						(error, results) => {
+							if (error) return res.status(500).json({ error: "unable_to_update" });
+							return res.sendStatus(200);
+						}
+					);
+				});
+			},
+			() => res.status(401).json({ error: "invalid_token" })
+		);
+	} else {
+		return res.status(422).json({ error: "no_token" });
+	}
 };
 
 module.exports.details = (req, res) => {
