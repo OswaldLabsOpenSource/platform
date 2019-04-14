@@ -61,6 +61,41 @@ const isEuCountry = data => {
 	].includes(data.country_code);
 };
 
+const shortKeys = {
+	i: "isEncoded",
+	x: "api_key",
+	a: "action",
+	e: "event",
+	d: "description",
+	s: "session_id",
+	v: "version",
+	c: "cacheKey",
+	b: "baseUrl",
+	l: "adBlock",
+	o: "cookies",
+	n: "do_not_track",
+	q: "absoluteResolution",
+	w: "availableResolution",
+	p: "nativeResolution",
+	f: "battery_charging",
+	h: "battery_chargingTime",
+	j: "battery_dischargingTime",
+	k: "battery_level",
+	m: "city",
+	z: "country_code",
+	g: "language",
+	t: "time_zone",
+	r: "referrer",
+	y: "title",
+	u: "url",
+	aa: "continent",
+	ab: "accuracy_radius",
+	ac: "latitude",
+	ad: "longitude",
+	ae: "region_code",
+	af: "region_name"
+};
+
 module.exports = (req, res) => {
 	const api_key = req.body.api_key || req.params.api_key;
 
@@ -120,6 +155,14 @@ module.exports = (req, res) => {
 				});
 			}
 		});
+
+	// Add support for short keys
+	Object.keys(shortKeys).forEach(shortKey => {
+		if (data.hasOwnProperty(shortKey) && typeof data[shortKey] !== "undefined") {
+			data[shortKeys[shortKey]] = data[shortKey];
+			delete data[shortKey];
+		}
+	});
 
 	// Add support for base64 encoded data
 	const data = req.body || {};
