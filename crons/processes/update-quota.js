@@ -24,7 +24,6 @@ const client = require("elasticsearch").Client({
 });
 
 module.exports = () => {
-	console.log("Starting updating CRON");
 	database
 		.readAll()
 		.then(list => {
@@ -42,10 +41,8 @@ module.exports = () => {
 			const userPromises = Object.keys(uniques).map(userId => () =>
 				new Promise((resolve, reject) => {
 					let total = 0;
-					console.log(">> Starting with user", userId);
 					const insidePromises = uniques[userId].map(apiKey => () =>
 						new Promise((resolveInside, rejectInside) => {
-							console.log(">>>>> Fetching records for API key", apiKey);
 							client
 								.search({
 									index: "2019-*",
@@ -73,7 +70,6 @@ module.exports = () => {
 								})
 								.then(response => {
 									total += response.hits.total;
-									console.log(">>>>> Got records for API key", apiKey, response.hits.total);
 									resolveInside();
 								})
 								.catch(error => rejectInside(error));
@@ -81,7 +77,6 @@ module.exports = () => {
 					);
 					serial(insidePromises)
 						.then(() => {
-							console.log(">> Finished records for user", userId, total);
 							grandTotal += total;
 							pool.getConnection(function(error, connection) {
 								if (error) {
@@ -93,18 +88,15 @@ module.exports = () => {
 										error => {
 											connection.release();
 											if (error) return reject(error);
-											console.log(">> Updated database for user", userId);
 											resolve();
 										}
 									);
 								}
 							});
 						})
-						.catch(error => console.log("Got inside error", error));
 				})
 			);
 			serial(userPromises).then(() => {
-				console.log("Finished: total this month", grandTotal);
 				fs.writeFile(
 					path.join(__dirname, "..", "..", "data.json"),
 					JSON.stringify({
@@ -115,5 +107,4 @@ module.exports = () => {
 				);
 			});
 		})
-		.catch(error => console.log("Got error", error));
 };

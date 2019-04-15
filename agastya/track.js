@@ -3,12 +3,14 @@ const randomString = require("randomstring");
 const parseDomain = require("parse-domain");
 const maxMind = require("maxmind");
 const geoLite2 = require("geolite2");
+const axios = require("axios");
 const md5 = require("md5");
 const atob = require("atob");
 const Fraud = require("fraud");
 const package = require("../package.json");
 const AWS = require("aws-sdk");
 const constants = require("../constants");
+const { getName } = require("country-list");
 const sentry = require("../sentry");
 sentry.init();
 
@@ -28,35 +30,70 @@ const database = new Fraud.default({
 
 const isEuCountry = data => {
 	return [
-		"Austria",
-		"Italy",
-		"Belgium",
-		"Latvia",
-		"Bulgaria",
-		"Lithuania",
-		"Croatia",
-		"Luxembourg",
-		"Cyprus",
-		"Malta",
-		"Czechia",
-		"Netherlands",
-		"Denmark",
-		"Poland",
-		"Estonia",
-		"Portugal",
-		"Finland",
-		"Romania",
-		"France",
-		"Slovakia",
-		"Germany",
-		"Slovenia",
-		"Greece",
-		"Spain",
-		"Hungary",
-		"Sweden",
-		"Ireland",
-		"United Kingdom"
-	].includes(data.country_name);
+		"AT",
+		"IT",
+		"BE",
+		"LV",
+		"BG",
+		"LT",
+		"HR",
+		"LU",
+		"CY",
+		"MT",
+		"CZ",
+		"NL",
+		"DK",
+		"PL",
+		"EE",
+		"PT",
+		"FI",
+		"RO",
+		"FR",
+		"SK",
+		"DE",
+		"SI",
+		"GR",
+		"ES",
+		"HU",
+		"SE",
+		"IE",
+		"GB"
+	].includes(data.country_code);
+};
+
+const shortKeys = {
+	i: "isEncoded",
+	x: "api_key",
+	a: "action",
+	e: "event",
+	d: "description",
+	s: "session_id",
+	v: "version",
+	c: "cacheKey",
+	b: "baseUrl",
+	l: "adBlock",
+	o: "cookies",
+	n: "do_not_track",
+	q: "absoluteResolution",
+	w: "availableResolution",
+	p: "nativeResolution",
+	f: "battery_charging",
+	h: "battery_chargingTime",
+	j: "battery_dischargingTime",
+	k: "battery_level",
+	m: "city",
+	z: "country_code",
+	g: "language",
+	t: "time_zone",
+	r: "referrer",
+	y: "title",
+	u: "url",
+	aa: "continent",
+	ab: "accuracy_radius",
+	ac: "latitude",
+	ad: "longitude",
+	ae: "region_code",
+	af: "region_name"
 };
 
 module.exports = (req, res) => {
@@ -76,7 +113,7 @@ module.exports = (req, res) => {
 	const getLocation = data =>
 		new Promise(resolve => {
 			const location = {};
-			if (data.country_name && data.country_code && data.city) {
+			if (data.country_code && data.city) {
 				data.geolocationCache = true;
 				resolve(location);
 			} else {
@@ -85,7 +122,6 @@ module.exports = (req, res) => {
 						const ipLookup = cityLookup.get(ip);
 						location.city = ipLookup.city.names.en;
 						location.continent = ipLookup.continent.names.en;
-						location.country_name = ipLookup.country.names.en;
 						location.country_code = ipLookup.country.iso_code;
 						location.latitude = ipLookup.location.latitude;
 						location.longitude = ipLookup.location.longitude;
@@ -94,11 +130,39 @@ module.exports = (req, res) => {
 						location.zip_code = ipLookup.postal.code;
 						location.region_name = ipLookup.subdivisions[0].names.en;
 						location.region_code = ipLookup.subdivisions[0].iso_code;
+						data.location_source = "maxmind";
 					} catch (e) {}
-					resolve(location);
+					if (location.country_code && location.city) return resolve(location);
+
+					axios({
+						method: "get",
+						url: `https://ipinfo.io/${ip}/?token=${constants.ipinfo}`,
+						headers: { Accept: "application/json" }
+					})
+						.then(info => {
+							if (info.city) data.city = info.city;
+							if (info.country) data.country_code = info.country;
+							if (info.loc) data.latitude = parseInt(info.loc.split(",")[0]);
+							if (info.loc) data.longitude = parseInt(info.loc.split(",")[1]);
+							if (info.postal) data.zip_code = info.postal;
+							if (info.region) data.region_name = info.region;
+							if (info.org) data.org = info.org;
+							if (info.hostname) data.hostname = info.hostname;
+							data.location_source = "ipinfo";
+						})
+						.catch(() => {})
+						.then(() => resolve(location));
 				});
 			}
 		});
+
+	// Add support for short keys
+	Object.keys(shortKeys).forEach(shortKey => {
+		if (data.hasOwnProperty(shortKey) && typeof data[shortKey] !== "undefined") {
+			data[shortKeys[shortKey]] = data[shortKey];
+			delete data[shortKey];
+		}
+	});
 
 	// Add support for base64 encoded data
 	const data = req.body || {};
@@ -147,24 +211,15 @@ module.exports = (req, res) => {
 	// User agent
 	let userAgent = {};
 	data.user_agent_string = data.user_agent_string || req.headers["user-agent"];
-	try {
-		userAgent = new WhichBrowser(data.user_agent_string);
-		if (data.browser_name && data.browser_version && data.os_name && data.os_version) {
-			userAgentCache = true;
-		} else {
+	if (data.browser_name && data.browser_version && data.os_name && data.os_version) {
+		userAgentCache = true;
+	} else {
+		try {
+			userAgent = new WhichBrowser(data.user_agent_string);
 			data.browser_name = userAgent.browser.name;
-			data.browser_version = parseInt(
-				userAgent.browser && typeof userAgent.browser.toString === "function"
-					? userAgent.browser
-							.toString()
-							.replace(data.browser_name, "")
-							.replace(/ /g, "")
-					: null
-			);
 			data.browser_subversion = userAgent.browser.version.value;
 			data.browser_stock = userAgent.browser.stock;
 			data.os_name = userAgent.os.name;
-			data.os_version = parseInt(userAgent.os.version.value.split(".")[0]);
 			data.os_subversion = userAgent.os.version.value;
 			data.os_build = userAgent.os.build;
 			data.browser_engine = userAgent.engine.name;
@@ -173,10 +228,23 @@ module.exports = (req, res) => {
 			data.device_type = userAgent.device.type;
 			data.device_subtype = userAgent.device.subtype;
 			data.device_identifier = userAgent.device.identifier;
+		} catch (e) {}
+		// Keeping error-prone values in a separate try/catch 
+		try {
+			userAgent = new WhichBrowser(data.user_agent_string);
+			data.browser_version = parseInt(
+				userAgent.browser && typeof userAgent.browser.toString === "function"
+					? userAgent.browser
+							.toString()
+							.replace(data.browser_name, "")
+							.replace(/ /g, "")
+					: null
+			);
+			data.os_version = parseInt(userAgent.os.version.value.split(".")[0]);
 			if (!data.browser_version && data.browser_subversion) data.browser_version = parseInt(data.browser_subversion);
 			if (!data.os_version && data.os_subversion) data.os_version = parseInt(data.os_subversion);
-		}
-	} catch (e) {}
+		} catch (e) {}
+	}
 
 	// Validate API key
 	database
@@ -201,7 +269,6 @@ module.exports = (req, res) => {
 					[
 						"city",
 						"continent",
-						"country_name",
 						"country_code",
 						"latitude",
 						"longitude",
@@ -242,6 +309,10 @@ module.exports = (req, res) => {
 							body: data
 						})
 						.then(result => {
+							// Don't save the country name is the database
+							// But send it as the response
+							if (data.country_code && !getName(data.country_code))
+								data.country_name = getName(data.country_code);
 							res.json({
 								status: "success",
 								response: data,
@@ -255,6 +326,7 @@ module.exports = (req, res) => {
 							});
 						})
 						.catch(error => {
+							console.log("error", error);
 							res.status(500).json({ error: "internal_error" });
 							sentry.captureException(error);
 						});

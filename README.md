@@ -28,6 +28,14 @@ Oswald Labs Platform is a set of open, extensible APIs and SDKs to build apps. T
 | `GET /agastya/gdpr/delete` | JSON number of deleted items |
 | `GET /agastya/secure-collect` | Anonymously track an event |
 
+### Agastya Loaders
+
+| Endpoint | Details
+| - | - |
+| `GET /_/API_KEY.js` | Load Agastya to your site |
+| `GET /_/dev/API_KEY.js` | Load Agastya development |
+| `GET /_/beta/API_KEY.js` | Load Agastya beta |
+
 ### Agastya API keys
 
 **Note:** APIs with the 🔒 (lock) emoji require Bearer token-based authentication. You can generate a token by using Oswald Labs Account APIs. APIs with the 🔑 (key) emoji require captcha validation.
