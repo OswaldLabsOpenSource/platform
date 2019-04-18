@@ -97,7 +97,7 @@ const shortKeys = {
 };
 
 module.exports = (req, res) => {
-	const api_key = req.body.api_key || req.params.api_key;
+	const api_key = req.query.x || req.body.api_key || req.params.api_key;
 
 	if (!api_key) return res.status(401).json({ error: "no_api_key" });
 
