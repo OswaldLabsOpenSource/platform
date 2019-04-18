@@ -1,6 +1,6 @@
 {
   "name": "platform",
-  "version": "2.0.54",
+  "version": "2.0.55",
   "main": "index.js",
   "repository": "https://github.com/AnandChowdhary/undrawcdn",
   "author": "Anand Chowdhary <anandchowdhary@gmail.com>",
@@ -71,6 +71,7 @@
     "recaptcha2": "^1.3.3",
     "redis": "^2.8.0",
     "stripe": "^6.0.0",
+    "strotate": "^2.0.0",
     "universal-analytics": "^0.4.20",
     "which-browser": "^0.4.0"
   }

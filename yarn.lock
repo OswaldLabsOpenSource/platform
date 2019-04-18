@@ -5426,6 +5426,11 @@ stripe@^6.0.0:
     safe-buffer "^5.1.1"
     uuid "^3.3.2"
 
+strotate@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/strotate/-/strotate-2.0.0.tgz#b53cc48d7499c00c1d4d0a0e6d222a2827979cf7"
+  integrity sha512-C1ln/RlAjVnLSCmI3U12J2s0R+E/jhee+B1hK5vmDeVCALr+46fQwTsgAcUZdJi/BZES8v/uhZWqer+C08gXEA==
+
 supports-color@5.4.0:
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-5.4.0.tgz#1c6b337402c2137605efe19f10fec390f6faab54"
