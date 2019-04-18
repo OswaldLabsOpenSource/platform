@@ -12,7 +12,6 @@ const AWS = require("aws-sdk");
 const constants = require("../constants");
 const { getName } = require("country-list");
 const sentry = require("../sentry");
-const unRot13 = require("strotate").unRot13;
 sentry.init();
 
 AWS.config.update({
@@ -172,7 +171,7 @@ module.exports = (req, res) => {
 	if (data.isEncoded) {
 		Object.keys(data).forEach(key => {
 			if (data.hasOwnProperty(key) && typeof data[key] !== "undefined" && key !== "isEncoded") {
-				data[key] = atob(unRot13(data[key]));
+				data[key] = atob(data[key]);
 			}
 		});
 		delete data.isEncoded;
