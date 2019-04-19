@@ -2,31 +2,28 @@ const script = `!function(){"use strict";var s=new XMLHttpRequest;s.onreadystate
 window.a11ySettings=window.a11ySettings||{};window.a11ySettings.token="__KEY__";`;
 
 module.exports.development = (req, res) => {
-    const send =
-        script
-            .replace(/__KEY__/g, req.params.apiKey.replace(".js", ""))
-            .replace(/__ENVIRONMENT__/g, "development");
-    res.type("js").set({
-        "Cache-Control": "no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0"
-    }).send(send);
-}
+	const send = script.replace(/__KEY__/g, req.params.apiKey.replace(".js", "")).replace(/__ENVIRONMENT__/g, "development");
+	res.type("js")
+		.set({
+			"Cache-Control": "no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0"
+		})
+		.send(send);
+};
 
 module.exports.acceptance = (req, res) => {
-    const send =
-        script
-            .replace(/__KEY__/g, req.params.apiKey.replace(".js", ""))
-            .replace(/__ENVIRONMENT__/g, "acceptance");
-    res.type("js").set({
-        "Cache-Control": "public, max-age=3600"
-    }).send(send);
-}
+	const send = script.replace(/__KEY__/g, req.params.apiKey.replace(".js", "")).replace(/__ENVIRONMENT__/g, "acceptance");
+	res.type("js")
+		.set({
+			"Cache-Control": "public, max-age=3600"
+		})
+		.send(send);
+};
 
 module.exports.production = (req, res) => {
-    const send =
-        script
-            .replace(/__KEY__/g, req.params.apiKey.replace(".js", ""))
-            .replace(/__ENVIRONMENT__/g, "production");
-    res.type("js").set({
-        "Cache-Control": "public, max-age=86400"
-    }).send(send);
-}
+	const send = script.replace(/__KEY__/g, req.params.apiKey.replace(".js", "")).replace(/__ENVIRONMENT__/g, "production");
+	res.type("js")
+		.set({
+			"Cache-Control": "public, max-age=86400"
+		})
+		.send(send);
+};

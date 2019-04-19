@@ -75,25 +75,24 @@ module.exports = () => {
 								.catch(error => rejectInside(error));
 						})
 					);
-					serial(insidePromises)
-						.then(() => {
-							grandTotal += total;
-							pool.getConnection(function(error, connection) {
-								if (error) {
-									return reject(error);
-								} else {
-									connection.query(
-										"UPDATE users SET pageviews_consumed=?, pageviews_updated=? WHERE id=?",
-										[total, Math.ceil(new Date().getTime() / 1000), userId],
-										error => {
-											connection.release();
-											if (error) return reject(error);
-											resolve();
-										}
-									);
-								}
-							});
-						})
+					serial(insidePromises).then(() => {
+						grandTotal += total;
+						pool.getConnection(function(error, connection) {
+							if (error) {
+								return reject(error);
+							} else {
+								connection.query(
+									"UPDATE users SET pageviews_consumed=?, pageviews_updated=? WHERE id=?",
+									[total, Math.ceil(new Date().getTime() / 1000), userId],
+									error => {
+										connection.release();
+										if (error) return reject(error);
+										resolve();
+									}
+								);
+							}
+						});
+					});
 				})
 			);
 			serial(userPromises).then(() => {
@@ -106,5 +105,5 @@ module.exports = () => {
 					() => process.exit()
 				);
 			});
-		})
+		});
 };

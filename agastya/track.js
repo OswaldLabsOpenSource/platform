@@ -229,7 +229,7 @@ module.exports = (req, res) => {
 			data.device_subtype = userAgent.device.subtype;
 			data.device_identifier = userAgent.device.identifier;
 		} catch (e) {}
-		// Keeping error-prone values in a separate try/catch 
+		// Keeping error-prone values in a separate try/catch
 		try {
 			userAgent = new WhichBrowser(data.user_agent_string);
 			data.browser_version = parseInt(
@@ -311,8 +311,7 @@ module.exports = (req, res) => {
 						.then(result => {
 							// Don't save the country name is the database
 							// But send it as the response
-							if (data.country_code && !getName(data.country_code))
-								data.country_name = getName(data.country_code);
+							if (data.country_code && !getName(data.country_code)) data.country_name = getName(data.country_code);
 							res.json({
 								status: "success",
 								response: data,
