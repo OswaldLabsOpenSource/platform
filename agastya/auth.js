@@ -213,7 +213,7 @@ module.exports.disable2FA = (req, res) => {
 						[token.user.id],
 						(error, results) => {
 							if (error) return res.status(500).json({ error: "unable_to_update" });
-							return res.sendStatus(200);
+							return res.json({ success: true });
 						}
 					);
 				});
