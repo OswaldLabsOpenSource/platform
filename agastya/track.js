@@ -97,7 +97,7 @@ const shortKeys = {
 };
 
 module.exports = (req, res) => {
-	const api_key = req.body.api_key || req.params.api_key;
+	const api_key = req.body.api_key || req.params.apiKey;
 
 	if (!api_key) return res.status(401).json({ error: "no_api_key" });
 
@@ -156,6 +156,10 @@ module.exports = (req, res) => {
 			}
 		});
 
+
+	// Add support for base64 encoded data
+	const data = req.body || {};
+
 	// Add support for short keys
 	Object.keys(shortKeys).forEach(shortKey => {
 		if (data.hasOwnProperty(shortKey) && typeof data[shortKey] !== "undefined") {
@@ -164,8 +168,6 @@ module.exports = (req, res) => {
 		}
 	});
 
-	// Add support for base64 encoded data
-	const data = req.body || {};
 	if (data.isEncoded) {
 		Object.keys(data).forEach(key => {
 			if (data.hasOwnProperty(key) && typeof data[key] !== "undefined" && key !== "isEncoded") {
