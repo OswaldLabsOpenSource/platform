@@ -6,7 +6,10 @@ const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
 const brute = require("express-brute");
 const store = new brute.MemoryStore();
-const bruteforce = new brute(store);
+const bruteforce = new brute(store, {
+	freeRetries: 10,
+	lifetime: 300000
+});
 const crons = require("./crons");
 const sentry = require("./sentry");
 
