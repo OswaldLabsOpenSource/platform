@@ -12,6 +12,6 @@ export class AgastyaController {
   async get(req: Request, res: Response) {
     const apiKey = req.params.apiKey;
     joiValidate({ apiKey: Joi.string().required() }, { apiKey });
-    res.json(await collect(apiKey, req.body, res.locals));
+    res.json(await collect(apiKey, req.body, res.locals, req.headers));
   }
 }

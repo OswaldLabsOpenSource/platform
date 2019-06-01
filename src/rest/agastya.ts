@@ -4,15 +4,16 @@ import pkg from "../../package.json";
 import md5 from "md5";
 import WhichBrowser from "which-browser";
 import { isEuMember } from "is-eu-member";
-// @ts-ignore
 import parseDomain from "parse-domain";
 import cryptoRandomString from "crypto-random-string";
 import { getGeolocationFromIp } from "../helpers/location";
+import { IncomingHttpHeaders } from "http";
 
 export const collect = async (
   apiKey: string,
   data: KeyValue,
-  locals: Locals
+  locals: Locals,
+  headers?: IncomingHttpHeaders
 ) => {
   // Support for short keys
   for (let shortKey in shortKeys) {
@@ -75,7 +76,7 @@ export const collect = async (
   }
 
   // Set user agent
-  const userAgent = new WhichBrowser(locals.userAgent);
+  const userAgent = new WhichBrowser(headers || locals.userAgent);
   try {
     data.browser_name = userAgent.browser.name;
     data.browser_subversion = userAgent.browser.version.value;
@@ -88,6 +89,24 @@ export const collect = async (
     data.device_type = userAgent.device.type;
     data.device_subtype = userAgent.device.subtype;
   } catch (error) {}
+  // Keeping error-prone values in a separate try/catch
+  try {
+    data.browser_version = parseInt(
+      userAgent.browser && typeof userAgent.browser.toString === "function"
+        ? userAgent.browser
+            .toString()
+            .replace(data.browser_name, "")
+            .replace(/ /g, "")
+        : "0"
+    );
+    data.os_version = parseInt(
+      userAgent.os.version.value.toString().split(".")[0]
+    );
+    if (!data.browser_version && data.browser_subversion)
+      data.browser_version = parseInt(data.browser_subversion);
+    if (!data.os_version && data.os_subversion)
+      data.os_version = parseInt(data.os_subversion);
+  } catch (e) {}
 
   // Add fingerprints
   data.ua_fp = md5(userAgent.toString());
