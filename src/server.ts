@@ -7,14 +7,18 @@ import responseTime from "response-time";
 import { json, urlencoded } from "body-parser";
 import { Server } from "@overnightjs/core";
 import { UserController } from "./controllers/user";
-import { errorHandler, trackingHandler } from "./helpers/middleware";
+import {
+  errorHandler,
+  trackingHandler,
+  rateLimitHandler,
+  speedLimitHandler
+} from "./helpers/middleware";
 import { OrganizationController } from "./controllers/organization";
 import { AdminController } from "./controllers/admin";
 import { AuthController } from "./controllers/auth";
 import { MembershipController } from "./controllers/membership";
 import { mkdirSync, existsSync } from "fs";
 import { join } from "path";
-import { AgastyaController } from "./controllers/agastya";
 
 const logDirectory = join(__dirname, "..", "logs");
 existsSync(logDirectory) || mkdirSync(logDirectory);
@@ -39,6 +43,8 @@ export class Staart extends Server {
     this.app.use(urlencoded({ extended: true }));
     this.app.use(responseTime());
     this.app.use(trackingHandler);
+    this.app.use(rateLimitHandler);
+    this.app.use(speedLimitHandler);
   }
 
   private setupControllers() {
@@ -47,15 +53,13 @@ export class Staart extends Server {
     const organizationController = new OrganizationController();
     const membershipController = new MembershipController();
     const adminController = new AdminController();
-    const agastyaController = new AgastyaController();
 
     super.addControllers([
       authController,
       userController,
       organizationController,
       membershipController,
-      adminController,
-      agastyaController
+      adminController
     ]);
   }
 
