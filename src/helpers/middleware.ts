@@ -19,7 +19,6 @@ const bruteForce = new Brute(store, {
   freeRetries: BRUTE_FREE_RETRIES,
   lifetime: BRUTE_LIFETIME
 });
-// @ts-ignore
 const rateLimiter = RateLimit({
   windowMs: RATE_LIMIT_TIME,
   max: RATE_LIMIT_MAX
