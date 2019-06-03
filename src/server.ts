@@ -19,6 +19,7 @@ import { AuthController } from "./controllers/auth";
 import { MembershipController } from "./controllers/membership";
 import { mkdirSync, existsSync } from "fs";
 import { join } from "path";
+import { ApiController } from "./controllers/api";
 
 const logDirectory = join(__dirname, "..", "logs");
 existsSync(logDirectory) || mkdirSync(logDirectory);
@@ -53,13 +54,15 @@ export class Staart extends Server {
     const organizationController = new OrganizationController();
     const membershipController = new MembershipController();
     const adminController = new AdminController();
+    const apiController = new ApiController();
 
     super.addControllers([
       authController,
       userController,
       organizationController,
       membershipController,
-      adminController
+      adminController,
+      apiController
     ]);
   }
 
