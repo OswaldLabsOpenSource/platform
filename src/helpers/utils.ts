@@ -1,6 +1,8 @@
 import anonymize from "ip-anonymize";
 import { User } from "../interfaces/tables/user";
 import Joi from "@hapi/joi";
+import LanguageDetect from "languagedetect";
+import ISO6391 from "iso-639-1";
 
 /**
  * Capitalize each first letter in a string
@@ -51,6 +53,20 @@ export const deleteSensitiveInfoUser = (user: User) => {
  */
 export const anonymizeIpAddress = (ipAddress: string) =>
   anonymize(ipAddress) || ipAddress;
+
+/**
+ * Detect the language of a text block
+ */
+export const detectTextLanguage = (text: string) => {
+  const lang = new LanguageDetect();
+  const detections = lang.detect(text, 1);
+  if (detections.length) {
+    try {
+      return ISO6391.getCode(detections[0][0]);
+    } catch (error) {}
+  }
+  return "en";
+};
 
 /**
  * MySQL columns which are booleans

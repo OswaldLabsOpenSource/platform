@@ -3814,6 +3814,11 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
 
+iso-639-1@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/iso-639-1/-/iso-639-1-2.0.5.tgz#a72ad3de139a96c4c4420b97b60b0af4cec4d7a3"
+  integrity sha512-2TcJ8AcsqM4AXLi92eFZX3xa7X6Eno/chq9yOR0AvSgb15Smmoh1miXyYJVWCkSmbzDimds3Ix2M4efhnOuxOg==
+
 isobject@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-2.1.0.tgz#f065561096a3f1da2ef46272f815c840d87e0c89"
@@ -4435,6 +4440,11 @@ kleur@^3.0.2:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
+
+languagedetect@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/languagedetect/-/languagedetect-1.2.0.tgz#b4cc7e5b12401fc861b448d481b3ec4e9ff0bea6"
+  integrity sha512-BMs1BIWCNcGtLrHA8zDBNnZzAMnYy7hrrU2F6yDhNScQ4q9sySy2RXEMZirQFJ8c8nAtLFwTWDxwjj97CG1LHQ==
 
 latest-version@^3.0.0:
   version "3.1.0"
