@@ -62,7 +62,7 @@ export const detectTextLanguage = (text: string) => {
   const detections = lang.detect(text, 1);
   if (detections.length) {
     try {
-      return ISO6391.getCode(detections[0][0]);
+      return ISO6391.getCode(detections[0][0]) || "en";
     } catch (error) {}
   }
   return "en";
