@@ -4,7 +4,6 @@ import asyncHandler from "express-async-handler";
 import Joi from "@hapi/joi";
 import { joiValidate, detectTextLanguage } from "../helpers/utils";
 import { translateText } from "../crud/api";
-import { language } from "googleapis/build/src/apis/language";
 
 @Controller("api")
 @ClassWrapper(asyncHandler)

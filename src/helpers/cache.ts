@@ -17,7 +17,7 @@ const generateKey = (category: CacheCategories, item: number | string) =>
 export const getItemFromCache = (
   category: CacheCategories,
   item: number | string
-) => {
+): string | undefined => {
   const key = generateKey(category, item);
   return cache.get(key);
 };
