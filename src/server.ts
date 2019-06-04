@@ -6,6 +6,8 @@ import rfs from "rotating-file-stream";
 import responseTime from "response-time";
 import { json, urlencoded } from "body-parser";
 import { Server } from "@overnightjs/core";
+import { mkdirSync, existsSync } from "fs";
+import { join } from "path";
 import { UserController } from "./controllers/user";
 import {
   errorHandler,
@@ -17,8 +19,6 @@ import { OrganizationController } from "./controllers/organization";
 import { AdminController } from "./controllers/admin";
 import { AuthController } from "./controllers/auth";
 import { MembershipController } from "./controllers/membership";
-import { mkdirSync, existsSync } from "fs";
-import { join } from "path";
 import { ApiController } from "./controllers/api";
 
 const logDirectory = join(__dirname, "..", "logs");

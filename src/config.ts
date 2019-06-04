@@ -17,7 +17,13 @@ export const RATE_LIMIT_TIME = process.env.RATE_LIMIT_TIME
   : 60000; // 1 minute
 export const RATE_LIMIT_MAX = process.env.RATE_LIMIT_MAX
   ? parseInt(process.env.RATE_LIMIT_MAX)
-  : 200; // Max 200 requests/minute from an IP
+  : 300; // Max 300 requests/minute from an IP
+export const PUBLIC_RATE_LIMIT_TIME = process.env.PUBLIC_RATE_LIMIT_TIME
+  ? parseInt(process.env.PUBLIC_RATE_LIMIT_TIME)
+  : 60000; // 1 minute
+export const PUBLIC_RATE_LIMIT_MAX = process.env.PUBLIC_RATE_LIMIT_MAX
+  ? parseInt(process.env.PUBLIC_RATE_LIMIT_MAX)
+  : 60; // Max 60 requests/minute from an IP
 export const SPEED_LIMIT_TIME = process.env.SPEED_LIMIT_TIME
   ? parseInt(process.env.SPEED_LIMIT_TIME)
   : 600000; // 10 minutes
@@ -56,6 +62,7 @@ export const SES_SECRET = process.env.SES_SECRET || "";
 export const JWT_SECRET = process.env.JWT_SECRET || "staart";
 export const JWT_ISSUER = process.env.JWT_ISSUER || "staart";
 export const SERVICE_2FA = process.env.SERVICE_2FA || "staart";
+
 export const TOKEN_EXPIRY_EMAIL_VERIFICATION =
   process.env.TOKEN_EXPIRY_EMAIL_VERIFICATION || "7d";
 export const TOKEN_EXPIRY_PASSWORD_RESET =
@@ -65,12 +72,9 @@ export const TOKEN_EXPIRY_APPROVE_LOCATION =
   process.env.TOKEN_EXPIRY_APPROVE_LOCATION || "10m";
 export const TOKEN_EXPIRY_REFRESH = process.env.TOKEN_EXPIRY_REFRESH || "30d";
 
-// Google Cloud APIs
 export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "";
 export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "";
 export const GOOGLE_CLIENT_REDIRECT = process.env.GOOGLE_CLIENT_REDIRECT || "";
-export const GOOGLE_PROJECT_ID = process.env.GOOGLE_PROJECT_ID || "";
-export const GOOGLE_TRANSLATE_KEY = process.env.GOOGLE_TRANSLATE_KEY || "";
 
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || "";
 export const CHARGEBEE_SECRET_KEY = process.env.CHARGEBEE_SECRET_KEY || "";
