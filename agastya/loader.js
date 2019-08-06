@@ -10,7 +10,7 @@ const script = `/**
  * <script src="https://platform-beta.oswaldlabs.com/v1/agastya/load/YOUR_API_KEY.js" async defer></script>
  */
 const script = document.getElementById("agastyascript");
-const url = "https://platform-beta.oswaldlabs.com/v1/agastya/load/${__KEY__}.js";
+const url = "https://platform-beta.oswaldlabs.com/v1/agastya/load/__KEY__.js";
 const s = document.createElement("script");
 s.setAttribute("src", url);
 const elt = document.body || document.head || document.documentElement;
