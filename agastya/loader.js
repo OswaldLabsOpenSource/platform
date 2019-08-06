@@ -1,4 +1,23 @@
-const script = `!function(){"use strict";var s=new XMLHttpRequest;s.onreadystatechange=function(){if(4===s.readyState){var e=JSON.parse(s.responseText),t=e["plugin-url"]+"/agastya."+e["cache-key"]+".js",a=document.createElement("script");a.id="agastyascript",a.setAttribute("data-cache-key",e["cache-key"]),a.setAttribute("data-app-url",e["app-url"]),a.setAttribute("data-api-key","__KEY__"),a.setAttribute("data-plugin-url",e["plugin-url"]),a.setAttribute("src",t),(document.getElementsByTagName("head")[0]||document.head||document.body||document.documentElement).appendChild(a)}},s.open("GET","https://agastya-version.oswaldlabs.com/meta.__ENVIRONMENT__.json",!0),s.setRequestHeader("cache-control","no-cache,must-revalidate,post-check=0,pre-check=0,max-age=0"),s.send()}();`;
+const script = `/**
+ * IMPORTANT UPGRADE NOTICE
+ * ========================
+ * 
+ * If you're setting this, you're still using the old Agastya loader.
+ * 
+ * Starting September 2019, we'll start to show a `console.warn` message on your site if you still haven't
+ * migrated to the new loader. We promise this is the last time you'll have to migrate. :)
+ * 
+ * <script src="https://platform-beta.oswaldlabs.com/v1/agastya/load/YOUR_API_KEY.js" async defer></script>
+ */
+const script = document.getElementById("agastyascript");
+let apiKey = "${__KEY__}";
+const url = `https://platform-beta.oswaldlabs.com/v1/agastya/load/${apiKey}.js`;
+const s = document.createElement("script");
+s.setAttribute("src", url);
+const elt = document.body || document.head || document.documentElement;
+if (elt)
+  elt.appendChild(s);
+`;
 
 module.exports.development = (req, res) => {
 	const send = script.replace(/__KEY__/g, req.params.apiKey.replace(".js", "")).replace(/__ENVIRONMENT__/g, "development");
