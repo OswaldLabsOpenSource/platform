@@ -4,14 +4,13 @@ const script = `/**
  * 
  * If you're setting this, you're still using the old Agastya loader.
  * 
- * Starting September 2019, we'll start to show a `console.warn` message on your site if you still haven't
+ * Starting September 2019, we'll start to show a console.warn message on your site if you still haven't
  * migrated to the new loader. We promise this is the last time you'll have to migrate. :)
  * 
  * <script src="https://platform-beta.oswaldlabs.com/v1/agastya/load/YOUR_API_KEY.js" async defer></script>
  */
 const script = document.getElementById("agastyascript");
-let apiKey = "${__KEY__}";
-const url = `https://platform-beta.oswaldlabs.com/v1/agastya/load/${apiKey}.js`;
+const url = "https://platform-beta.oswaldlabs.com/v1/agastya/load/${__KEY__}.js";
 const s = document.createElement("script");
 s.setAttribute("src", url);
 const elt = document.body || document.head || document.documentElement;
