@@ -9,11 +9,11 @@ const script = `/**
  * 
  * <script src="https://platform-beta.oswaldlabs.com/v1/agastya/load/YOUR_API_KEY.js" async defer></script>
  */
-const script = document.getElementById("agastyascript");
-const url = "https://platform-beta.oswaldlabs.com/v1/agastya/load/__KEY__.js";
-const s = document.createElement("script");
+var script = document.getElementById("agastyascript");
+var url = "https://platform-beta.oswaldlabs.com/v1/agastya/load/__KEY__.js";
+var s = document.createElement("script");
 s.setAttribute("src", url);
-const elt = document.body || document.head || document.documentElement;
+var elt = document.body || document.head || document.documentElement;
 if (elt)
   elt.appendChild(s);
 `;
