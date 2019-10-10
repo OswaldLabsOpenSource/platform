@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
 const brute = require("express-brute");
+const morgan = require("morgan");
 const store = new brute.MemoryStore();
 const bruteforce = new brute(store, {
 	freeRetries: 10,
@@ -20,6 +21,7 @@ crons();
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(cors());
 app.enable("trust proxy");
+app.use(morgan("tiny"));
 
 const limiter = new rateLimit({
 	windowMs: 60000,

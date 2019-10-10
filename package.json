@@ -1,6 +1,6 @@
 {
   "name": "platform",
-  "version": "2.0.58",
+  "version": "2.0.59",
   "main": "index.js",
   "repository": "https://github.com/AnandChowdhary/undrawcdn",
   "author": "Anand Chowdhary <anandchowdhary@gmail.com>",
@@ -60,6 +60,7 @@
     "maxmind": "^2.12.0",
     "md5": "^2.2.1",
     "microsoft-computer-vision": "^0.4.2",
+    "morgan": "^1.9.1",
     "mysql": "^2.16.0",
     "nodemailer": "^5.1.1",
     "otplib": "^11.0.0",
