@@ -21,7 +21,7 @@ crons();
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(cors());
 app.enable("trust proxy");
-app.use(morgan("tiny"));
+app.use(morgan("combined"));
 
 const limiter = new rateLimit({
 	windowMs: 60000,
