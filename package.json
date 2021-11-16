@@ -30,7 +30,7 @@
     "@postlight/mercury-parser": "^2.0.0",
     "@sentry/node": "^4.6.4",
     "atob": "^2.1.2",
-    "aws-sdk": "^2.408.0",
+    "aws-sdk": "^2.814.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
